@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.30">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>GRAPH Sommerakdemie 24 – 2&nbsp; Hypothesen testen vs.&nbsp;Parameter schätzen</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<link href="./fully_bayesian_estimation.html" rel="next">
+<link href="./grundlegende_begriffe.html" rel="prev">
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<meta name="shinylive:serviceworker_dir" content=".">
+<script src="site_libs/quarto-contrib/shinylive-0.2.3/shinylive/load-shinylive-sw.js" type="module"></script>
+<script src="site_libs/quarto-contrib/shinylive-0.2.3/shinylive/run-python-blocks.js" type="module"></script>
+<link href="site_libs/quarto-contrib/shinylive-0.2.3/shinylive/shinylive.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
+<script src="site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "Keine Treffer",
+    "search-matching-documents-text": "Treffer",
+    "search-copy-link-title": "Link in die Suche kopieren",
+    "search-hide-matches-text": "Zusätzliche Treffer verbergen",
+    "search-more-match-text": "weitere Treffer in diesem Dokument",
+    "search-more-matches-text": "weitere Treffer in diesem Dokument",
+    "search-clear-button-title": "Zurücksetzen",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Abbrechen",
+    "search-submit-button-title": "Abschicken",
+    "search-label": "Suchen"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./hypothesen_testen_vs_parameter_schaetzen.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Hypothesen testen vs.&nbsp;Parameter schätzen</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./graph_logo.jpg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">GRAPH Sommerakdemie 24</a> 
+    </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Willkommen 👋!</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./grundlegende_begriffe.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Grundlegende Begriffe</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hypothesen_testen_vs_parameter_schaetzen.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Hypothesen testen vs.&nbsp;Parameter schätzen</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./fully_bayesian_estimation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The (Fully) Bayesian Estimation Aproach</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Literatur</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Inhaltsverzeichnis</h2>
+   
+  <ul>
+  <li><a href="#inferenz--und-deskriptivstatistik" id="toc-inferenz--und-deskriptivstatistik" class="nav-link active" data-scroll-target="#inferenz--und-deskriptivstatistik"><span class="header-section-number">2.1</span> Inferenz- und Deskriptivstatistik</a></li>
+  <li><a href="#schätzung-vs.-testung" id="toc-schätzung-vs.-testung" class="nav-link" data-scroll-target="#schätzung-vs.-testung"><span class="header-section-number">2.2</span> Schätzung vs.&nbsp;Testung</a></li>
+  <li><a href="#hypothesenarten" id="toc-hypothesenarten" class="nav-link" data-scroll-target="#hypothesenarten"><span class="header-section-number">2.3</span> Hypothesenarten</a></li>
+  <li><a href="#bayes-faktoren-für-punkthypothesen" id="toc-bayes-faktoren-für-punkthypothesen" class="nav-link" data-scroll-target="#bayes-faktoren-für-punkthypothesen"><span class="header-section-number">2.4</span> Bayes Faktoren für Punkthypothesen</a>
+  <ul class="collapse">
+  <li><a href="#definition-und-deren-plausibilisierung" id="toc-definition-und-deren-plausibilisierung" class="nav-link" data-scroll-target="#definition-und-deren-plausibilisierung"><span class="header-section-number">2.4.1</span> Definition und deren Plausibilisierung</a></li>
+  <li><a href="#berechnung-interpretation-im-minimalbeispiel" id="toc-berechnung-interpretation-im-minimalbeispiel" class="nav-link" data-scroll-target="#berechnung-interpretation-im-minimalbeispiel"><span class="header-section-number">2.4.2</span> Berechnung &amp; Interpretation im Minimalbeispiel</a></li>
+  <li><a href="#interaktive-visualisierung" id="toc-interaktive-visualisierung" class="nav-link" data-scroll-target="#interaktive-visualisierung"><span class="header-section-number">2.4.3</span> Interaktive Visualisierung</a></li>
+  <li><a href="#interaktive-visualisierung-1" id="toc-interaktive-visualisierung-1" class="nav-link" data-scroll-target="#interaktive-visualisierung-1"><span class="header-section-number">2.4.4</span> Interaktive Visualisierung</a></li>
+  </ul></li>
+  <li><a href="#bayes-faktoren-für-verteilungshypothesen" id="toc-bayes-faktoren-für-verteilungshypothesen" class="nav-link" data-scroll-target="#bayes-faktoren-für-verteilungshypothesen"><span class="header-section-number">2.5</span> Bayes Faktoren für Verteilungshypothesen</a>
+  <ul class="collapse">
+  <li><a href="#interaktive-visualisierung-2" id="toc-interaktive-visualisierung-2" class="nav-link" data-scroll-target="#interaktive-visualisierung-2"><span class="header-section-number">2.5.1</span> Interaktive Visualisierung</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Hypothesen testen vs.&nbsp;Parameter schätzen</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="inferenz--und-deskriptivstatistik" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="inferenz--und-deskriptivstatistik"><span class="header-section-number">2.1</span> Inferenz- und Deskriptivstatistik</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<p><strong>Deskriptivstatistiken</strong> machen Aussagen über vorliegende Datensätze z.B. <em>»Median aller Noten eines Zeugnisses«</em></p>
+</div><div class="column" style="width:5%;">
+
+</div><div class="column" style="width:55%;">
+<p><strong>Inferenzstatistiken</strong> machen anhand von Daten Aussagen über (hypothetische) Mechanismen, die diese Daten erzeugen <span class="citation" data-cites="eid2013">(<a href="references.html#ref-eid2013" role="doc-biblioref">Eid, Gollwitzer, &amp; Schmitt, 2013</a>)</span> z.B. <em>»Befürworten von 100 zufällig ausgewählten Erwachsenen 63 Ziffernnoten in der Grundschule, wie sicher liegt dann eine Zustimmung (&gt; 50%) in der Gesamterwachsenenbevölkerung vor?«</em></p>
+</div>
+</div>
+<p><img src="img/ying yang-4.svg" class="img-fluid"></p>
+</section>
+<section id="schätzung-vs.-testung" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="schätzung-vs.-testung"><span class="header-section-number">2.2</span> Schätzung vs.&nbsp;Testung</h2>
+<table class="table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 40%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: center;">Frequentistische<br>Statistik</th>
+<th style="text-align: center;">Bayesianische<br>Statistik</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Parameterschätzung</td>
+<td style="text-align: center;">Konfidenzintervalle</td>
+<td style="text-align: center;">Posterior Distributions</td>
+</tr>
+<tr class="even">
+<td>Hypothesentest</td>
+<td style="text-align: center;">p-Werte</td>
+<td style="text-align: center;">Bayes Faktoren/ROPE +HDI.</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p>Inferenzstatistische <em>Schätzung</em> (estimation with quantified uncertainty) trifft anhand von Stichproben Aussagen über Parameter der Grundgesamtheit (Population) aus der die Stichprobe gezogen wurde. <br><br> (Inferenzstatistische) <em>Hypothesentests</em> bewerten anhand von Stichprobendaten die Gültigkeit von Hypothesen in der Grundgesamtheit (Population) aus der die Stichprobe gezogen wurde <span class="citation" data-cites="kruschke2018">(<a href="references.html#ref-kruschke2018" role="doc-biblioref">Kruschke &amp; Liddell, 2018</a>)</span>.</p>
+</blockquote>
+</section>
+<section id="hypothesenarten" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="hypothesenarten"><span class="header-section-number">2.3</span> Hypothesenarten</h2>
+<p>Bayesianische wie frequentistischen Hypothesentests können unterschiedliche Arten von Hypothesen zugrunde gelegt werden:</p>
+<ul>
+<li><strong>Punkthypothesen</strong> setzen Parameter gleich einer reellen Zahl; etwa <span class="math inline">\(H_0\text{: } \delta = 0\)</span></li>
+<li><strong>Äquivalenzhypothesen</strong> nehmen Parameter in einem reellen Intervall an; etwa <span class="math inline">\(H_0\text{: } \delta \not\in\ [-.3, .3]\)</span></li>
+<li><strong>Informative Hypothesen</strong> nehmen eine Ordnungsrelation mehrerer Parameter an; etwa <span class="math inline">\(\mu_{\text{Baseline}} &lt; \mu_{\text{Imaginary Pill}} &lt; \mu_{\text{Blinded Placebo}}\)</span> <span class="citation" data-cites="buergler2023">(<a href="references.html#ref-buergler2023" role="doc-biblioref">Buergler u.&nbsp;a., 2023</a>)</span></li>
+</ul>
+<blockquote class="blockquote">
+<p><strong>Die <em>Art</em> der (falsifizierten) Hypothese entscheidet wesentlich stärker über den Informationsgehalt eines Hypothesentests als die Entscheidung für das frequentistische oder bayesianische Paradigma</strong> <span class="citation" data-cites="hoijtink2012">(<a href="references.html#ref-hoijtink2012" role="doc-biblioref">Hoijtink, 2012</a>)</span>.</p>
+</blockquote>
+<p>Dies ist am leichtest anhand der Nullhypothese nachvollziehbar. Wird etwa die Nullhypothese <span class="math inline">\(H_0\text{: } \delta = 0\)</span> verworfen, wird entsprechend die Alternativhypothese <span class="math inline">\(H_A\text{: } \delta \neq 0\)</span> angenommen. Diese enthält aber quasi keine Information, da sie nur mit einer einzigen Beobachtung (d = 0.000000 …) verworfen werden kann und im kritischen Rationalismus gilt, dass eine Aussage umso mehr Information enthält, umso leichter sie verworfen werden kann <span class="citation" data-cites="doering2016">(<a href="references.html#ref-doering2016" role="doc-biblioref">Döring &amp; Bortz, 2016</a>)</span>.</p>
+<p>Äquivalenzhypothesen können sowohl frequentistisch <span class="citation" data-cites="lakens2017">(z.B. TOAST-Prozedur in <iconify-icon inline="" icon="fa6-brands:r-project" aria-label="Icon r-project from fa6-brands Iconify.design set." title="Icon r-project from fa6-brands Iconify.design set."></iconify-icon> und JASP, <a href="references.html#ref-lakens2017" role="doc-biblioref">Lakens, 2017</a>)</span> wie bayesianisch <span class="citation" data-cites="kruschke2015">(z.B. ROPE-Ansatz <a href="references.html#ref-kruschke2015" role="doc-biblioref">Kruschke, 2015</a>)</span> getestet werden. Für das Testen informativer Hypothesen liegen bayesianische Methoden in (u.a.) JASP und <iconify-icon inline="" icon="fa6-brands:r-project" aria-label="Icon r-project from fa6-brands Iconify.design set." title="Icon r-project from fa6-brands Iconify.design set."></iconify-icon> vor <span class="citation" data-cites="gu2019">(z.B. <code>{bain}</code>, <a href="references.html#ref-gu2019" role="doc-biblioref">Gu, Hoijtink, Mulder, &amp; Rosseel, 2019</a>)</span>.</p>
+</section>
+<section id="bayes-faktoren-für-punkthypothesen" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="bayes-faktoren-für-punkthypothesen"><span class="header-section-number">2.4</span> Bayes Faktoren für Punkthypothesen</h2>
+<section id="definition-und-deren-plausibilisierung" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="definition-und-deren-plausibilisierung"><span class="header-section-number">2.4.1</span> Definition und deren Plausibilisierung</h3>
+<p>Der Bayes Faktor ist wie folgt definiert:</p>
+<p><span class="math display">\[
+BF=\frac{P\left(D \mid H_1\right)}{P\left(D\mid H_2\right)}
+\]</span> Wobei <span class="math inline">\(D\)</span> für »Data« steht und <span class="math inline">\(H_1\)</span> und <span class="math inline">\(H_2\)</span> für Modell 1 und Modell 2 stehen - oftmals wird stattdessen auch Hypothese 1 <span class="math inline">\(H_1\)</span> und Hypothese 2 <span class="math inline">\(H_2\)</span> geschrieben, was dasselbe meint.<br>
+Dass der BF relative Evidenz quantifiziert, wird bereits aus der Definition klar, verbreitete Fehlverständnisse <span class="citation" data-cites="tendeiro2024">(<a href="references.html#ref-tendeiro2024" role="doc-biblioref">Tendeiro, Kiers, Hoekstra, Wong, &amp; Morey, 2024</a>)</span> werden hoffentlich eingedämmt, wenn man sich klar macht, dass aus dieser Definition mithilfe des Bayes Theorem folgt</p>
+<p><span class="math display">\[
+BF=\frac{P\left(D \mid H_1\right)}{P\left(D\mid H_2\right)}\overset{\text{Bayes Theorem}}{=}\frac{\frac{P\left(D \mid H_1\right) \cdot P(D)}{P\left(H_1\right)}}{\frac{P\left(D \mid H_2\right) \cdot P(D)}{P\left(H_2\right)}}\overset{\text{Kürze } P(D)}{=}\frac{P\left(H_1 \mid D\right) \cdot P\left(H_2\right)}{P\left(H_2 \mid D\right) \cdot P\left(H_1\right)} = \frac{P\left(H_1 \mid D\right)}{P\left(H_2 \mid D\right)} \cdot \frac{P\left(H_2\right)}{P\left(H_1\right)}
+\]</span></p>
+<p>Stellt man nun die Gleichung um erhält man:</p>
+<p><span class="math display">\[
+\frac{P\left(H_1 \mid D\right)}{P\left(H_2 \mid D\right)} = \frac{P\left(H_1\right)}{P\left(H_2\right)} \cdot \frac{P\left(D \mid H_1\right)}{P\left(D\mid H_2\right)}
+\]</span></p>
+<p>also</p>
+<p><span class="math display">\[
+\text{Posterior Odds} = \text{Prior Odds} \cdot \text{Bayes Faktor}
+\]</span></p>
+<p>Der Bayes Faktor ist also der Multiplikator (Faktor), der die Prior Odds in die Posterior Odds transformiert (updatet).</p>
+</section>
+<section id="berechnung-interpretation-im-minimalbeispiel" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="berechnung-interpretation-im-minimalbeispiel"><span class="header-section-number">2.4.2</span> Berechnung &amp; Interpretation im Minimalbeispiel</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Aufgabe <iconify-icon inline="" icon="fa6-solid:person-digging" aria-label="Icon person-digging from fa6-solid Iconify.design set." title="Icon person-digging from fa6-solid Iconify.design set."></iconify-icon></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Lösungshilfe</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Meine Rechnung</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>Angenommen zwei Bildungspolitiker:innen streiten sich über die Verbreitung der Elternmeinung zur Befürwortung von G8 vs.&nbsp;G9. Die eine Politikerin behauptet, dass 45% der Eltern G9 befürworten, die andere Politikerin behauptet, dass 58% der Eltern G9 befürworten. In einer »Studie« wurden 4 Proband:innen befragt und genau drei davon waren pro G9 waren. Wie groß ist der Bayes Faktor?</p>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p><img src="img/BF G9.png" class="img-fluid" style="width:50.0%"></p>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<blockquote class="blockquote">
+<p>Im »Bäumchen« gilt laut Achtklassmathematik: Wahrscheinlichkeiten entlang eines Pfades multiplizieren, Wahrscheinlichkeiten entlang verschiedener Pfade addieren.</p>
+</blockquote>
+<p><span class="math inline">\(\frac{P(\text{drei aus 4 pro G9}|\theta = .45) = 4\cdot(.45 \cdot .45 \cdot .45 \cdot .55)}{P(\text{drei aus 4 pro G9}|\theta = .58) = 4\cdot(.58 \cdot .58 \cdot .58 \cdot .42)} \approx `{r} round((4*.45^3*.55)/(4*.58^3*.42), 3)`\)</span></p>
+</div>
+</div>
+</div>
+</section>
+<section id="interaktive-visualisierung" class="level3" data-number="2.4.3">
+<h3 data-number="2.4.3" class="anchored" data-anchor-id="interaktive-visualisierung"><span class="header-section-number">2.4.3</span> Interaktive Visualisierung</h3>
+<p>Im Beispiel zuvor, lagen Punkthypothesen vor. Für diese ist die Berechnung des Bayes Faktors besonders einfach, da die Wahrscheinlichkeiten der Daten unter den Hypothesen direkt berechnet werden können.</p>
+</section>
+<section id="interaktive-visualisierung-1" class="level3" data-number="2.4.4">
+<h3 data-number="2.4.4" class="anchored" data-anchor-id="interaktive-visualisierung-1"><span class="header-section-number">2.4.4</span> Interaktive Visualisierung</h3>
+<p>In dieser interaktiven Visualisierung kann man beobachten wie sich der Bayes Faktor in Abhängigkeit von den Daten und den Hypothesen verhält.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Aufgabe <iconify-icon inline="" icon="fa6-solid:person-digging" aria-label="Icon person-digging from fa6-solid Iconify.design set." title="Icon person-digging from fa6-solid Iconify.design set."></iconify-icon>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Macht euch mit der Bedienung der App vertraut und macht dann Vorhersagen über die Veränderung des Bayesfaktors, wenn sich die Daten oder Hypothesen ändern.</p>
+</div>
+</div>
+</div>
+<pre class="shinylive-r" data-engine="r"><code>#| standalone: true
+#| viewerHeight: 800
+
+library(bslib)
+library(shiny)
+library(tidyverse)
+library(shinyjs)
+
+ui &lt;- page_fluid(
+  theme = bs_theme(
+   "bg-dark" = "#1bbc9d50",
+    # Controls the accent (e.g., hyperlink, button, etc) colors
+    primary = "#1bbc9d",
+    secondary = "#1bbc9d",
+    "input-border-color" = "#1bbc9d"
+  ),
+  h5(""),
+  layout_column_wrap(
+    card(card_header(class = "bg-dark", "Punkthypothesen"),
+         card_body(
+           sliderInput(
+               "theta1", "Hypothese 1: Anteil Pro G9",
+               min = 0,
+               max = 1,
+               value = .4,
+               step = .1
+           ),
+           sliderInput(
+               "theta2", "Hypothese 2: Anteil Pro G8",
+               min = 0,
+               max = 1,
+               value = .6,
+               step = .1
+           ))),
+    card(card_header(class = "bg-dark", "Daten"),
+         card_body(
+            numericInput(
+              "prog9",
+              "n₁ = Befürwortung G9",
+              min = 0,
+              value = 10,
+              step = 1),
+           numericInput(
+             "prog8",
+             "n₂ = Befürwortung G8",
+             min = 0,
+             value = 5,
+             step = 1)
+         ))), 
+  card(card_header("Likelihoods und Bayes Factor", class = "bg-dark"),
+       card_body(shinycssloaders::withSpinner(plotOutput("plot"), color = "#1bbc9d")
+))
+)
+
+
+server &lt;- function(input, output, session) {
+  
+    
+# n &lt;- 30 # N()
+# obs &lt;- 20 input$prog9
+# theta1 &lt;- .5 # input$theta1
+# theta2 &lt;- .7 # input$theta2
+# wkeit1 &lt;- choose(n, obs)*theta1^obs*(1-theta1)^(n-obs) # wkeit1()
+# wkeit2 &lt;- choose(n, obs)*theta2^obs*(1-theta2)^(n-obs) # wkeit2()
+
+### custom reactive values #####################################################
+N &lt;- reactive({input$prog8 + input$prog9})
+
+wkeit1 &lt;- 
+    reactive({choose(N(), 
+                     input$prog9)*input$theta1^input$prog9*
+                  (1-input$theta1)^(N()-input$prog9)})
+
+wkeit2 &lt;- 
+    reactive({choose(N(), 
+                     input$prog9)*input$theta2^input$prog9*
+                  (1-input$theta2)^(N()-input$prog9)})
+
+### create data ################################################################
+data &lt;- reactive({
+    return(
+        rbind(tibble(k = 1:N(),
+                     p = choose(N(), k)*input$theta1^k*(1-input$theta1)^(N()-k), 
+                     theta = as.character(input$theta1)),
+              tibble(k = 1:N(),
+                     p = choose(N(), k)*input$theta2^k*(1-input$theta2)^(N()-k),  
+                     theta = as.character(input$theta2))) %&gt;% 
+              mutate(obs_eq_k = k == N()) %&gt;% 
+              as_tibble()
+    )
+})
+
+### plot #######################################################################
+output$plot &lt;- renderPlot({
+
+ ggplot() +
+    # add whole binomial distributions with alpha
+    geom_segment(data = data() %&gt;% 
+                          filter(theta == input$theta1), 
+                 aes(x = k - .1, xend = k -.1, y = 0, yend = p), 
+                 color = "#bc991b60") +
+    geom_segment(data = data() %&gt;% 
+                     filter(theta == input$theta2), 
+                 aes(x = k + .1, xend = k +.1, y = 0, yend = p), 
+                 color = "#bc1b9a50") +
+    # add selected binomial distributions without alpha
+    geom_segment(data = data() %&gt;% 
+                     filter(theta == input$theta1 &amp; k == input$prog9), 
+                 aes(x = k - .1, xend = k -.1, y = 0, yend = p, color = "#bc991b")) +
+    geom_segment(data = data() %&gt;% 
+                     filter(theta == input$theta2 &amp; k == input$prog9), 
+                 aes(x = k + .1, xend = k +.1, y = 0, yend = p, color = "#bc1b9a")) +
+    theme_minimal() +
+    geom_text(data = tibble(x = input$prog9, y = -.005, 
+                            text = paste("BF =", 
+                                         formatC(wkeit1()/wkeit2(), 
+                                                 format = "e", 
+                                                 digits = 2))),
+              aes(x, y, label = text)) +
+    xlab("Anzahl") + ylab("Wahrscheinlichkeit") +
+    ggtitle("Berechnung des Bayes-Faktors", "bei Punkthypothesen") +
+    scale_color_identity(name = "Likelihood",
+                         breaks = c("#bc991b", "#bc1b9a"),
+                         labels = c("Hyp. 1", "Hyp 2."),
+                         guide = "legend")
+})
+
+### debug ######################################################################
+output$debug &lt;- renderPrint({
+ data()
+})
+
+}
+
+shinyApp(ui = ui, server = server)</code></pre>
+</section>
+</section>
+<section id="bayes-faktoren-für-verteilungshypothesen" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="bayes-faktoren-für-verteilungshypothesen"><span class="header-section-number">2.5</span> Bayes Faktoren für Verteilungshypothesen</h2>
+<p>Punkthypothesen sind in den meisten sozialwissenschaftlichen Anwendungen sehr wenig informativ. In der Regel sind die Hypothesen Verteilungshypothesen. Im G8- vs.&nbsp;G9-Beispiel wäre eine Verteilungshypothese etwa »Befürwortung von G9 in der Bevölkerung liegt recht sicher zwischen 35% und 45%« oder »Jeder Prozentsatz der G9-Befürwortung ist gleich wahrscheinlich«.<br>
+So informativ solche Hypothesen sind, erschweren sie die Berechnung des Bayes Faktors: Im Beispiel oben hatten wir das genaue <span class="math inline">\(\theta\)</span> und konnten anhand dessen mithilfe des Bäumchen die Wahrscheinlichkeiten der Daten unter den Hypothesen berechnen. Bei Verteilungshypothesen ist das nicht mehr möglich, da diese Hypothesen unendlich viele <span class="math inline">\(\theta\)</span>s enthalten. Es wird daher über die <span class="math inline">\(\theta\)</span>s marginalisiert:</p>
+<p><span class="math display">\[P\left(D \mid H\right)=\int P(D \mid \theta) \cdot \pi(\theta) d \theta\]</span> Dies kann man sich vorstellen als eine Berechnung der Likelihood <span class="math inline">\(P\left(D \mid \theta\right)\)</span> für jedes <span class="math inline">\(\theta\)</span> woraus dann ein um <span class="math inline">\(\pi(\theta)\)</span> gewichteter Durchschnitt gebildet wird.</p>
+<section id="interaktive-visualisierung-2" class="level3" data-number="2.5.1">
+<h3 data-number="2.5.1" class="anchored" data-anchor-id="interaktive-visualisierung-2"><span class="header-section-number">2.5.1</span> Interaktive Visualisierung</h3>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Aufgabe <iconify-icon inline="" icon="fa6-solid:person-digging" aria-label="Icon person-digging from fa6-solid Iconify.design set." title="Icon person-digging from fa6-solid Iconify.design set."></iconify-icon>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Macht euch mit der Bedienung der App vertraut. Wie ändern sich die Marginal Likelihoods wenn die Hypothesen weniger präzise werden? Wie ändert sich dadurch der Bayes Faktor? Ist das im EInklang mit der Idee von Occam’s Razor?</p>
+</div>
+</div>
+</div>
+<pre class="shinylive-r" data-engine="r"><code>#| standalone: true
+#| viewerHeight: 850
+
+library(bslib)
+library(shiny)
+library(tidyverse)
+library(shinyjs)
+library(bayesplay)
+
+ui &lt;- page_fluid(
+  theme = bs_theme(
+   "bg-dark" = "#1bbc9d50",
+    # Controls the accent (e.g., hyperlink, button, etc) colors
+    primary = "#1bbc9d",
+    secondary = "#1bbc9d",
+    "input-border-color" = "#1bbc9d"
+  ),
+  h5(""),
+  layout_column_wrap(
+    card(card_header(class = "bg-dark", "Hypothese 1"),
+      layout_column_wrap(
+         card(
+           sliderInput(
+             "prior_mu1",
+             "Mittelwert Hypothese 1",
+             min = 0,
+             max = 1,
+             value = .42,
+             step = .01
+           ),
+           sliderInput(
+             "prior_phi1",
+             "Präzision Hypothese 1",
+             min = 2,
+             max = 100,
+             value = 13,
+             step = 1
+           )),
+         card(
+           plotOutput("prior1", height = "200px")
+         )
+         )),
+   
+    card(card_header(class = "bg-dark", "Hypothese 2"),
+      layout_column_wrap(
+         card(
+          sliderInput(
+             "prior_mu2",
+             "Mittelwert Hypothese 2",
+             min = 0,
+             max = 1,
+             value = .65,
+             step = .01
+           ),
+           sliderInput(
+             "prior_phi2",
+             "Präzision Hypothese 2",
+             min = 2,
+             max = 100,
+             value = 13,
+             step = 1
+           )),
+           card(plotOutput("prior2", height = "200px"))
+         ))), 
+ layout_column_wrap(
+  card(card_header(class = "bg-dark", "Daten"),
+     numericInput(
+                "prog9",
+                "n₁ = Befürwortung G9",
+                min = 0,
+                value = 5,
+                step = 1),
+     numericInput(
+                "prog8",
+                "n₂ = Befürwortung G8",
+                min = 0,
+                value = 12,
+                step = 1)
+           ), 
+  card(card_header("Likelihoods und Bayes Factor", class = "bg-dark"),
+       card_body(shinycssloaders::withSpinner(plotOutput("plot"), color = "#1bbc9d")
+))
+))
+
+
+
+server &lt;- function(input, output, session) {
+
+################################################################################
+### Plot of Priors                                                           ###
+################################################################################
+
+
+### custom functions ###########################################################
+# muphi_to_shapes 
+muphi_to_shapes &lt;- function(mu, phi) {
+  shape1 &lt;- mu * phi
+  shape2 &lt;- (1 - mu) * phi
+  return(list(shape1 = shape1, shape2 = shape2))
+}
+
+### aux variables ##############################################################
+# convert prior parameterization
+
+prior_shapes1 &lt;- reactive({
+  muphi_to_shapes(input$prior_mu1, input$prior_phi1)
+})
+
+prior_shapes2 &lt;- reactive({
+  muphi_to_shapes(input$prior_mu2, input$prior_phi2)
+})
+
+### Plot Prior 1 ###############################################################
+output$prior1 &lt;- renderPlot({
+
+  p &lt;- seq(0,1, length=1000)
+
+  plot(
+    p,
+    dbeta(p,
+          prior_shapes1()$shape1,
+          prior_shapes1()$shape2),
+    type = 'l',
+    col = "#bc1b9a",
+    ylab = "W'keitsdichte",
+    xlab = "Anteil G9-Befürworter:innen",
+    frame.plot = F
+    )
+}
+)
+
+### Plot Prior 2 ###############################################################
+output$prior2 &lt;- renderPlot({
+
+  p &lt;- seq(0,1, length=1000)
+
+  plot(
+    p,
+    dbeta(p,
+          prior_shapes2()$shape1,
+          prior_shapes2()$shape2),
+    type = 'l',
+    col = "#bc991b",
+    ylab = "W'keitsdichte",
+    xlab = "Anteil G9-Befürworter:innen",
+    frame.plot = F
+    )
+}
+)
+
+
+################################################################################
+### Plot of Likelihoods                                                      ###
+################################################################################
+
+### custom reactive values #####################################################
+N &lt;- reactive({input$prog8 + input$prog9})
+
+
+### compute the bf from marginal likelihoods ##################################
+wkeit1 &lt;- reactive({
+  integral(likelihood(family = "binomial", 
+                      successes = input$prog9, 
+                      trials = input$prog9 + input$prog8)*
+              prior(family = "beta", 
+                  alpha = prior_shapes1()$shape1, 
+                  beta = prior_shapes1()$shape2))
+})
+
+wkeit2 &lt;- reactive({ 
+  integral(likelihood(family = "binomial", 
+                      successes = input$prog9, 
+                      trials = input$prog9 + input$prog8)*
+              prior(family = "beta", 
+                  alpha = prior_shapes2()$shape1, 
+                  beta = prior_shapes2()$shape2))
+})
+
+### create data for the two marginal likelihood distributions ####################
+data &lt;- reactive({
+
+data_h1 &lt;- tibble(k = 1:N(),
+                  hyp = "Hypothese 1")
+for(i in 1:N()){
+data_h1$p[i] &lt;- integral(likelihood(family = "binomial", 
+                         successes = data_h1$k[i], 
+                         trials = input$prog9 + input$prog8)*
+                   prior(family = "beta", 
+                         alpha = prior_shapes1()$shape1, 
+                         beta = prior_shapes1()$shape2))
+}
+
+data_h1 &lt;- data_h1 %&gt;% 
+  mutate(obs_eq_k = k == N()) 
+
+
+data_h2 &lt;- tibble(k = 1:N(),
+                  hyp = "Hypothese 2")
+for(i in 1:N()){
+data_h2$p[i] &lt;- integral(likelihood(family = "binomial", 
+                         successes = data_h2$k[i], 
+                         trials = input$prog9 + input$prog8)*
+                   prior(family = "beta", 
+                         alpha = prior_shapes2()$shape1, 
+                         beta = prior_shapes2()$shape2))
+}
+
+data_h2 &lt;- data_h2 %&gt;% 
+  mutate(obs_eq_k = k == N()) 
+
+
+
+return(full_join(data_h1, data_h2))
+
+})
+
+### plot #######################################################################
+output$plot &lt;- renderPlot({
+
+ ggplot() +
+    # add whole binomial distributions with alpha
+    geom_segment(data = data() %&gt;% 
+                          filter(hyp == "Hypothese 1"), 
+                 aes(x = k - .1, xend = k -.1, y = 0, yend = p), 
+                 color = "#bc1b9a50") +
+    geom_segment(data = data() %&gt;% 
+                     filter(hyp == "Hypothese 2"), 
+                 aes(x = k + .1, xend = k +.1, y = 0, yend = p), 
+                 color = "#bc991b60") +
+    # add selected binomial distributions without alpha
+    geom_segment(data = data() %&gt;% 
+                     filter(hyp == "Hypothese 1" &amp; k == input$prog9), 
+                 aes(x = k - .1, xend = k -.1, y = 0, yend = p, color = "#bc1b9a")) +
+    geom_segment(data = data() %&gt;% 
+                     filter(hyp == "Hypothese 2" &amp; k == input$prog9), 
+                 aes(x = k + .1, xend = k +.1, y = 0, yend = p, color = "#bc991b")) +
+    theme_minimal() +
+    geom_text(data = tibble(x = input$prog9, y = -.005, 
+                            text = paste("BF =", 
+                                         formatC(wkeit1()/wkeit2(), 
+                                                 format = "e", 
+                                                 digits = 2))),
+              aes(x, y, label = text)) +
+    xlab("Anzahl") + ylab("Wahrscheinlichkeit") +
+    ggtitle("Berechnung des Bayes-Faktors", "bei Punkthypothesen") +
+    scale_color_identity(name = "Marginal Likelihood",
+                         breaks = c("#bc1b9a", "#bc991b"),
+                         labels = c("Hyp. 1", "Hyp 2."),
+                         guide = "legend") +
+    theme(legend.position = "bottom")
+})
+
+### debug ######################################################################
+output$debug &lt;- renderPrint({
+ data()
+})
+
+}
+
+shinyApp(ui = ui, server = server)</code></pre>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-buergler2023" class="csl-entry" role="listitem">
+Buergler, S., Sezer, D., Bagge, N., Kirsch, I., Locher, C., Carvalho, C., &amp; Gaab, J. (2023). <a href="https://doi.org/10.1038/s41598-023-29624-7">Imaginary Pills and Open-Label Placebos Can Reduce Test Anxiety by Means of Placebo Mechanisms <span></span> <span>Scientific Reports</span></a>. <em>Scientific Reports</em>, <em>13</em>(1), 2624.
+</div>
+<div id="ref-doering2016" class="csl-entry" role="listitem">
+Döring, N., &amp; Bortz, J. (2016). <em><span>Forschungsmethoden und Evaluation in den Sozial- und Humanwissenschaften</span></em> (5., vollst). <span>Berlin, Heidelberg</span>: <span>Springer</span>.
+</div>
+<div id="ref-eid2013" class="csl-entry" role="listitem">
+Eid, M., Gollwitzer, M., &amp; Schmitt, M. (2013). <em>Statistik Und <span>Forschungsmethoden</span>: <span>Lehrbuch</span>. <span>Mit Online-Materialien</span></em> (3. Aufl.). <span>Beltz</span>.
+</div>
+<div id="ref-gu2019" class="csl-entry" role="listitem">
+Gu, X., Hoijtink, H., Mulder, J., &amp; Rosseel, Y. (2019). <a href="https://doi.org/10.1080/00949655.2019.1590574">Bain: <span>A</span> Program for <span>Bayesian</span> Testing of Order Constrained Hypotheses in Structural Equation Models</a>. <em>Journal of Statistical Computation and Simulation</em>, <em>89</em>(8), 1526–1553.
+</div>
+<div id="ref-hoijtink2012" class="csl-entry" role="listitem">
+Hoijtink, H. (2012). <em>Informative Hypotheses: <span>Theory</span> and Practice for Behavioral and Social Scientists</em>. <span>Boca Raton</span>: <span>CRC</span>.
+</div>
+<div id="ref-kruschke2015" class="csl-entry" role="listitem">
+Kruschke, J. K. (2015). <em>Doing <span>Bayesian</span> Data Analysis: <span>A</span> Tutorial with <span>R</span>, <span>JAGS</span>, and <span>Stan</span></em> (2nd Aufl.). <span>Academic Press</span>.
+</div>
+<div id="ref-kruschke2018" class="csl-entry" role="listitem">
+Kruschke, J. K., &amp; Liddell, T. M. (2018). <a href="https://doi.org/10.3758/s13423-016-1221-4">The <span>Bayesian</span> New Statistics: <span>Hypothesis</span> Testing, Estimation, Meta-Analysis, and Power Analysis from a <span>Bayesian</span> Perspective</a>. <em>Psychonomic Bulletin &amp; Review</em>, <em>25</em>, 178–206.
+</div>
+<div id="ref-lakens2017" class="csl-entry" role="listitem">
+Lakens, D. (2017). <a href="https://doi.org/10.1177/1948550617697177">Equivalence <span>Tests</span>: <span>A Practical Primer</span> for t <span>Tests</span>, <span>Correlations</span>, and <span>Meta-Analyses</span></a>. <em>Social Psychological and Personality Science</em>, <em>8</em>(4), 355–362.
+</div>
+<div id="ref-tendeiro2024" class="csl-entry" role="listitem">
+Tendeiro, J. N., Kiers, H. A. L., Hoekstra, R., Wong, T. K., &amp; Morey, R. D. (2024). <a href="https://doi.org/10.1177/25152459231213371">Diagnosing the <span>Misuse</span> of the <span>Bayes Factor</span> in <span>Applied Research</span></a>. <em>Advances in Methods and Practices in Psychological Science</em>, <em>7</em>(1), 25152459231213371.
+</div>
+</div>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Kopiert");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Kopiert");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./grundlegende_begriffe.html" class="pagination-link" aria-label="Grundlegende Begriffe">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Grundlegende Begriffe</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./fully_bayesian_estimation.html" class="pagination-link" aria-label="The (Fully) Bayesian Estimation Aproach">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The (Fully) Bayesian Estimation Aproach</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

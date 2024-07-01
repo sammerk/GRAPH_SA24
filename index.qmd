@@ -1,0 +1,16 @@
+# Willkommen 👋! {.unnumbered}
+
+Hier finden sich
+
+* Erklärungen, 
+* Videos,
+* Aufgaben,
+* Daten und
+* Code
+
+für unseren Kurs **Bayesian Regression Modelling**.  
+Zu Beginn des Kurses bitte ich alle eine aktuelle Version von {{< iconify fa6-brands r-project >}} und  {{< iconify devicon:rstudio >}}Studio installiert zu haben und außerdem - falls noch nicht mit `{brms}` gearbeitet wurde - [dieser Anleitung](https://learnb4ss.github.io/learnB4SS/articles/install-brms.html) zur Installation und Verknüpfung des {{< iconify fa6-brands r-project >}}-Paketes `{brms}` zu folgen. Bei Problemen bitte gerne bei mir vorab melden!
+
+
+
+

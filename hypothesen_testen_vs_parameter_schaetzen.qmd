@@ -1,0 +1,524 @@
+# Hypothesen testen vs. Parameter schätzen 
+
+## Inferenz- und Deskriptivstatistik 
+
+:::: {.columns}
+
+::: {.column width='40%'}
+**Deskriptivstatistiken** machen Aussagen über vorliegende Datensätze z.B. *»Median aller Noten eines Zeugnisses«*
+:::
+
+::: {.column width='5%'}
+:::
+::: {.column width='55%'}
+**Inferenzstatistiken** machen anhand von Daten Aussagen über (hypothetische) Mechanismen, die diese Daten erzeugen [@eid2013] z.B. *»Befürworten von 100 zufällig ausgewählten Erwachsenen 63 Ziffernnoten in der Grundschule, wie sicher liegt dann eine Zustimmung (> 50%) in der Gesamterwachsenenbevölkerung vor?«*
+:::
+
+::::
+
+![](img/ying yang-4.svg){}
+
+## Schätzung vs. Testung
+
+|                    |  Frequentistische<br>Statistik | Bayesianische<br>Statistik |
+|--------------------|:------------------------------:|:--------------------------:|
+| Parameterschätzung | Konfidenzintervalle            | Posterior Distributions    |
+| Hypothesentest     | p-Werte                        | Bayes Faktoren/ROPE +HDI.  |
+
+> Inferenzstatistische *Schätzung* (estimation with quantified uncertainty) trifft anhand von Stichproben Aussagen über Parameter der Grundgesamtheit (Population) aus der die Stichprobe gezogen wurde.  <br><br>
+(Inferenzstatistische) *Hypothesentests* bewerten anhand von Stichprobendaten die Gültigkeit von Hypothesen in der Grundgesamtheit (Population) aus der die Stichprobe gezogen wurde [@kruschke2018].
+
+## Hypothesenarten
+Bayesianische wie frequentistischen Hypothesentests können unterschiedliche Arten von Hypothesen zugrunde gelegt werden:
+
+* **Punkthypothesen** setzen Parameter gleich einer reellen Zahl; etwa $H_0\text{: } \delta = 0$ 
+* **Äquivalenzhypothesen** nehmen Parameter in einem reellen Intervall an; etwa  $H_0\text{: } \delta \not\in\ [-.3, .3]$ 
+* **Informative Hypothesen** nehmen eine Ordnungsrelation mehrerer Parameter an; etwa $\mu_{\text{Baseline}} < \mu_{\text{Imaginary Pill}} < \mu_{\text{Blinded Placebo}}$ [@buergler2023]
+
+> **Die *Art* der (falsifizierten) Hypothese entscheidet wesentlich stärker über den Informationsgehalt eines Hypothesentests als die Entscheidung für das frequentistische oder bayesianische Paradigma** [@hoijtink2012].
+
+Dies ist am leichtest anhand der Nullhypothese nachvollziehbar. Wird etwa die Nullhypothese $H_0\text{: } \delta = 0$ verworfen, wird entsprechend die Alternativhypothese $H_A\text{: } \delta \neq 0$ angenommen. Diese enthält aber quasi keine Information, da sie nur mit einer einzigen Beobachtung (d = 0.000000 ...) verworfen werden kann und im kritischen Rationalismus gilt, dass eine Aussage umso mehr Information enthält, umso leichter sie verworfen werden kann [@doering2016]. 
+
+Äquivalenzhypothesen können sowohl frequentistisch [z.B. TOAST-Prozedur in {{< iconify fa6-brands r-project >}} und JASP, @lakens2017] wie bayesianisch [z.B. ROPE-Ansatz @kruschke2015] getestet werden. Für das Testen informativer Hypothesen liegen bayesianische Methoden in (u.a.) JASP und {{< iconify fa6-brands r-project >}} vor [z.B. `{bain}`, @gu2019].
+
+
+## Bayes Faktoren für Punkthypothesen
+
+### Definition und deren Plausibilisierung
+Der Bayes Faktor ist wie folgt definiert:
+
+$$
+BF=\frac{P\left(D \mid H_1\right)}{P\left(D\mid H_2\right)}
+$$
+Wobei $D$ für »Data« steht und $H_1$ und $H_2$ für Modell 1 und Modell 2 stehen - oftmals wird stattdessen auch Hypothese 1 $H_1$ und Hypothese 2 $H_2$ geschrieben, was dasselbe meint.  
+Dass der BF relative Evidenz quantifiziert, wird bereits aus der Definition klar, verbreitete Fehlverständnisse [@tendeiro2024] werden hoffentlich eingedämmt, wenn man sich klar macht, dass aus dieser Definition mithilfe des Bayes Theorem folgt
+
+$$
+BF=\frac{P\left(D \mid H_1\right)}{P\left(D\mid H_2\right)}\overset{\text{Bayes Theorem}}{=}\frac{\frac{P\left(D \mid H_1\right) \cdot P(D)}{P\left(H_1\right)}}{\frac{P\left(D \mid H_2\right) \cdot P(D)}{P\left(H_2\right)}}\overset{\text{Kürze } P(D)}{=}\frac{P\left(H_1 \mid D\right) \cdot P\left(H_2\right)}{P\left(H_2 \mid D\right) \cdot P\left(H_1\right)} = \frac{P\left(H_1 \mid D\right)}{P\left(H_2 \mid D\right)} \cdot \frac{P\left(H_2\right)}{P\left(H_1\right)}
+$$
+
+Stellt man nun die Gleichung um erhält man:
+
+$$
+\frac{P\left(H_1 \mid D\right)}{P\left(H_2 \mid D\right)} = \frac{P\left(H_1\right)}{P\left(H_2\right)} \cdot \frac{P\left(D \mid H_1\right)}{P\left(D\mid H_2\right)} 
+$$
+
+also
+
+$$
+\text{Posterior Odds} = \text{Prior Odds} \cdot \text{Bayes Faktor}
+$$
+
+Der Bayes Faktor ist also der Multiplikator (Faktor), der die Prior Odds in die Posterior Odds transformiert (updatet).
+
+### Berechnung & Interpretation im Minimalbeispiel
+
+
+
+
+
+::: {.panel-tabset}
+
+## Aufgabe {{< iconify fa6-solid person-digging >}}
+Angenommen zwei Bildungspolitiker:innen streiten sich über die Verbreitung der Elternmeinung zur Befürwortung von G8 vs. G9. Die eine Politikerin behauptet, dass 45% der Eltern G9 befürworten, die andere Politikerin behauptet, dass 58% der Eltern G9 befürworten. In einer »Studie« wurden 4 Proband:innen befragt und genau drei davon waren pro G9 waren. Wie groß ist der Bayes Faktor?
+
+
+## Lösungshilfe
+
+![](img/BF G9.png){width=50%}
+
+## Meine Rechnung
+> Im »Bäumchen« gilt laut Achtklassmathematik: Wahrscheinlichkeiten entlang eines Pfades multiplizieren, Wahrscheinlichkeiten entlang verschiedener Pfade addieren.
+
+
+$\frac{P(\text{drei aus 4 pro G9}|\theta = .45) = 4\cdot(.45 \cdot .45 \cdot .45 \cdot .55)}{P(\text{drei aus 4 pro G9}|\theta = .58) = 4\cdot(.58 \cdot .58 \cdot .58 \cdot .42)} \approx `{r} round((4*.45^3*.55)/(4*.58^3*.42), 3)`$
+
+
+:::
+
+
+### Interaktive Visualisierung
+Im Beispiel zuvor, lagen Punkthypothesen vor. Für diese ist die Berechnung des Bayes Faktors besonders einfach, da die Wahrscheinlichkeiten der Daten unter den Hypothesen direkt berechnet werden können. 
+
+### Interaktive Visualisierung
+In dieser interaktiven Visualisierung kann man beobachten wie sich der Bayes Faktor in Abhängigkeit von den Daten und den Hypothesen verhält.
+
+:::{.callout-note collapse=false appearance='default' icon=false}
+## Aufgabe {{< iconify fa6-solid person-digging >}}
+Macht euch mit der Bedienung der App vertraut und macht dann Vorhersagen über die Veränderung des Bayesfaktors, wenn sich die Daten oder Hypothesen ändern.
+:::
+
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 800
+
+library(bslib)
+library(shiny)
+library(tidyverse)
+library(shinyjs)
+
+ui <- page_fluid(
+  theme = bs_theme(
+   "bg-dark" = "#1bbc9d50",
+    # Controls the accent (e.g., hyperlink, button, etc) colors
+    primary = "#1bbc9d",
+    secondary = "#1bbc9d",
+    "input-border-color" = "#1bbc9d"
+  ),
+  h5(""),
+  layout_column_wrap(
+    card(card_header(class = "bg-dark", "Punkthypothesen"),
+         card_body(
+           sliderInput(
+               "theta1", "Hypothese 1: Anteil Pro G9",
+               min = 0,
+               max = 1,
+               value = .4,
+               step = .1
+           ),
+           sliderInput(
+               "theta2", "Hypothese 2: Anteil Pro G8",
+               min = 0,
+               max = 1,
+               value = .6,
+               step = .1
+           ))),
+    card(card_header(class = "bg-dark", "Daten"),
+         card_body(
+            numericInput(
+              "prog9",
+              "n₁ = Befürwortung G9",
+              min = 0,
+              value = 10,
+              step = 1),
+           numericInput(
+             "prog8",
+             "n₂ = Befürwortung G8",
+             min = 0,
+             value = 5,
+             step = 1)
+         ))), 
+  card(card_header("Likelihoods und Bayes Factor", class = "bg-dark"),
+       card_body(shinycssloaders::withSpinner(plotOutput("plot"), color = "#1bbc9d")
+))
+)
+
+
+server <- function(input, output, session) {
+  
+    
+# n <- 30 # N()
+# obs <- 20 input$prog9
+# theta1 <- .5 # input$theta1
+# theta2 <- .7 # input$theta2
+# wkeit1 <- choose(n, obs)*theta1^obs*(1-theta1)^(n-obs) # wkeit1()
+# wkeit2 <- choose(n, obs)*theta2^obs*(1-theta2)^(n-obs) # wkeit2()
+
+### custom reactive values #####################################################
+N <- reactive({input$prog8 + input$prog9})
+
+wkeit1 <- 
+    reactive({choose(N(), 
+                     input$prog9)*input$theta1^input$prog9*
+                  (1-input$theta1)^(N()-input$prog9)})
+
+wkeit2 <- 
+    reactive({choose(N(), 
+                     input$prog9)*input$theta2^input$prog9*
+                  (1-input$theta2)^(N()-input$prog9)})
+
+### create data ################################################################
+data <- reactive({
+    return(
+        rbind(tibble(k = 1:N(),
+                     p = choose(N(), k)*input$theta1^k*(1-input$theta1)^(N()-k), 
+                     theta = as.character(input$theta1)),
+              tibble(k = 1:N(),
+                     p = choose(N(), k)*input$theta2^k*(1-input$theta2)^(N()-k),  
+                     theta = as.character(input$theta2))) %>% 
+              mutate(obs_eq_k = k == N()) %>% 
+              as_tibble()
+    )
+})
+
+### plot #######################################################################
+output$plot <- renderPlot({
+
+ ggplot() +
+    # add whole binomial distributions with alpha
+    geom_segment(data = data() %>% 
+                          filter(theta == input$theta1), 
+                 aes(x = k - .1, xend = k -.1, y = 0, yend = p), 
+                 color = "#bc991b60") +
+    geom_segment(data = data() %>% 
+                     filter(theta == input$theta2), 
+                 aes(x = k + .1, xend = k +.1, y = 0, yend = p), 
+                 color = "#bc1b9a50") +
+    # add selected binomial distributions without alpha
+    geom_segment(data = data() %>% 
+                     filter(theta == input$theta1 & k == input$prog9), 
+                 aes(x = k - .1, xend = k -.1, y = 0, yend = p, color = "#bc991b")) +
+    geom_segment(data = data() %>% 
+                     filter(theta == input$theta2 & k == input$prog9), 
+                 aes(x = k + .1, xend = k +.1, y = 0, yend = p, color = "#bc1b9a")) +
+    theme_minimal() +
+    geom_text(data = tibble(x = input$prog9, y = -.005, 
+                            text = paste("BF =", 
+                                         formatC(wkeit1()/wkeit2(), 
+                                                 format = "e", 
+                                                 digits = 2))),
+              aes(x, y, label = text)) +
+    xlab("Anzahl") + ylab("Wahrscheinlichkeit") +
+    ggtitle("Berechnung des Bayes-Faktors", "bei Punkthypothesen") +
+    scale_color_identity(name = "Likelihood",
+                         breaks = c("#bc991b", "#bc1b9a"),
+                         labels = c("Hyp. 1", "Hyp 2."),
+                         guide = "legend")
+})
+
+### debug ######################################################################
+output$debug <- renderPrint({
+ data()
+})
+
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+## Bayes Faktoren für Verteilungshypothesen
+Punkthypothesen sind in den meisten sozialwissenschaftlichen Anwendungen sehr wenig informativ. In der Regel sind die Hypothesen Verteilungshypothesen. Im G8- vs. G9-Beispiel wäre eine Verteilungshypothese etwa »Befürwortung von G9 in der Bevölkerung liegt recht sicher zwischen 35% und 45%« oder »Jeder Prozentsatz der G9-Befürwortung ist gleich wahrscheinlich«.  
+So informativ solche Hypothesen sind, erschweren sie die Berechnung des Bayes Faktors: Im Beispiel oben hatten wir das genaue $\theta$ und konnten anhand dessen mithilfe des Bäumchen die Wahrscheinlichkeiten der Daten unter den Hypothesen berechnen. Bei Verteilungshypothesen ist das nicht mehr möglich, da diese Hypothesen unendlich viele $\theta$s enthalten. Es wird daher über die $\theta$s marginalisiert: 
+
+$$P\left(D \mid H\right)=\int P(D \mid \theta) \cdot \pi(\theta) d \theta$$
+Dies kann man sich vorstellen als eine Berechnung der Likelihood $P\left(D \mid \theta\right)$ für jedes $\theta$ woraus dann ein um $\pi(\theta)$ gewichteter Durchschnitt gebildet wird.
+
+### Interaktive Visualisierung
+
+:::{.callout-note collapse=false appearance='default' icon=false}
+## Aufgabe {{< iconify fa6-solid person-digging >}}
+Macht euch mit der Bedienung der App vertraut. Wie ändern sich die Marginal Likelihoods wenn die Hypothesen weniger präzise werden? Wie ändert sich dadurch der Bayes Faktor? Ist das im EInklang mit der Idee von Occam's Razor?
+:::
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 850
+
+library(bslib)
+library(shiny)
+library(tidyverse)
+library(shinyjs)
+library(bayesplay)
+
+ui <- page_fluid(
+  theme = bs_theme(
+   "bg-dark" = "#1bbc9d50",
+    # Controls the accent (e.g., hyperlink, button, etc) colors
+    primary = "#1bbc9d",
+    secondary = "#1bbc9d",
+    "input-border-color" = "#1bbc9d"
+  ),
+  h5(""),
+  layout_column_wrap(
+    card(card_header(class = "bg-dark", "Hypothese 1"),
+      layout_column_wrap(
+         card(
+           sliderInput(
+             "prior_mu1",
+             "Mittelwert Hypothese 1",
+             min = 0,
+             max = 1,
+             value = .42,
+             step = .01
+           ),
+           sliderInput(
+             "prior_phi1",
+             "Präzision Hypothese 1",
+             min = 2,
+             max = 100,
+             value = 13,
+             step = 1
+           )),
+         card(
+           plotOutput("prior1", height = "200px")
+         )
+         )),
+   
+    card(card_header(class = "bg-dark", "Hypothese 2"),
+      layout_column_wrap(
+         card(
+          sliderInput(
+             "prior_mu2",
+             "Mittelwert Hypothese 2",
+             min = 0,
+             max = 1,
+             value = .65,
+             step = .01
+           ),
+           sliderInput(
+             "prior_phi2",
+             "Präzision Hypothese 2",
+             min = 2,
+             max = 100,
+             value = 13,
+             step = 1
+           )),
+           card(plotOutput("prior2", height = "200px"))
+         ))), 
+ layout_column_wrap(
+  card(card_header(class = "bg-dark", "Daten"),
+     numericInput(
+                "prog9",
+                "n₁ = Befürwortung G9",
+                min = 0,
+                value = 5,
+                step = 1),
+     numericInput(
+                "prog8",
+                "n₂ = Befürwortung G8",
+                min = 0,
+                value = 12,
+                step = 1)
+           ), 
+  card(card_header("Likelihoods und Bayes Factor", class = "bg-dark"),
+       card_body(shinycssloaders::withSpinner(plotOutput("plot"), color = "#1bbc9d")
+))
+))
+
+
+
+server <- function(input, output, session) {
+
+################################################################################
+### Plot of Priors                                                           ###
+################################################################################
+
+
+### custom functions ###########################################################
+# muphi_to_shapes 
+muphi_to_shapes <- function(mu, phi) {
+  shape1 <- mu * phi
+  shape2 <- (1 - mu) * phi
+  return(list(shape1 = shape1, shape2 = shape2))
+}
+
+### aux variables ##############################################################
+# convert prior parameterization
+
+prior_shapes1 <- reactive({
+  muphi_to_shapes(input$prior_mu1, input$prior_phi1)
+})
+
+prior_shapes2 <- reactive({
+  muphi_to_shapes(input$prior_mu2, input$prior_phi2)
+})
+
+### Plot Prior 1 ###############################################################
+output$prior1 <- renderPlot({
+
+  p <- seq(0,1, length=1000)
+
+  plot(
+    p,
+    dbeta(p,
+          prior_shapes1()$shape1,
+          prior_shapes1()$shape2),
+    type = 'l',
+    col = "#bc1b9a",
+    ylab = "W'keitsdichte",
+    xlab = "Anteil G9-Befürworter:innen",
+    frame.plot = F
+    )
+}
+)
+
+### Plot Prior 2 ###############################################################
+output$prior2 <- renderPlot({
+
+  p <- seq(0,1, length=1000)
+
+  plot(
+    p,
+    dbeta(p,
+          prior_shapes2()$shape1,
+          prior_shapes2()$shape2),
+    type = 'l',
+    col = "#bc991b",
+    ylab = "W'keitsdichte",
+    xlab = "Anteil G9-Befürworter:innen",
+    frame.plot = F
+    )
+}
+)
+
+
+################################################################################
+### Plot of Likelihoods                                                      ###
+################################################################################
+
+### custom reactive values #####################################################
+N <- reactive({input$prog8 + input$prog9})
+
+
+### compute the bf from marginal likelihoods ##################################
+wkeit1 <- reactive({
+  integral(likelihood(family = "binomial", 
+                      successes = input$prog9, 
+                      trials = input$prog9 + input$prog8)*
+              prior(family = "beta", 
+                  alpha = prior_shapes1()$shape1, 
+                  beta = prior_shapes1()$shape2))
+})
+
+wkeit2 <- reactive({ 
+  integral(likelihood(family = "binomial", 
+                      successes = input$prog9, 
+                      trials = input$prog9 + input$prog8)*
+              prior(family = "beta", 
+                  alpha = prior_shapes2()$shape1, 
+                  beta = prior_shapes2()$shape2))
+})
+
+### create data for the two marginal likelihood distributions ####################
+data <- reactive({
+
+data_h1 <- tibble(k = 1:N(),
+                  hyp = "Hypothese 1")
+for(i in 1:N()){
+data_h1$p[i] <- integral(likelihood(family = "binomial", 
+                         successes = data_h1$k[i], 
+                         trials = input$prog9 + input$prog8)*
+                   prior(family = "beta", 
+                         alpha = prior_shapes1()$shape1, 
+                         beta = prior_shapes1()$shape2))
+}
+
+data_h1 <- data_h1 %>% 
+  mutate(obs_eq_k = k == N()) 
+
+
+data_h2 <- tibble(k = 1:N(),
+                  hyp = "Hypothese 2")
+for(i in 1:N()){
+data_h2$p[i] <- integral(likelihood(family = "binomial", 
+                         successes = data_h2$k[i], 
+                         trials = input$prog9 + input$prog8)*
+                   prior(family = "beta", 
+                         alpha = prior_shapes2()$shape1, 
+                         beta = prior_shapes2()$shape2))
+}
+
+data_h2 <- data_h2 %>% 
+  mutate(obs_eq_k = k == N()) 
+
+
+
+return(full_join(data_h1, data_h2))
+
+})
+
+### plot #######################################################################
+output$plot <- renderPlot({
+
+ ggplot() +
+    # add whole binomial distributions with alpha
+    geom_segment(data = data() %>% 
+                          filter(hyp == "Hypothese 1"), 
+                 aes(x = k - .1, xend = k -.1, y = 0, yend = p), 
+                 color = "#bc1b9a50") +
+    geom_segment(data = data() %>% 
+                     filter(hyp == "Hypothese 2"), 
+                 aes(x = k + .1, xend = k +.1, y = 0, yend = p), 
+                 color = "#bc991b60") +
+    # add selected binomial distributions without alpha
+    geom_segment(data = data() %>% 
+                     filter(hyp == "Hypothese 1" & k == input$prog9), 
+                 aes(x = k - .1, xend = k -.1, y = 0, yend = p, color = "#bc1b9a")) +
+    geom_segment(data = data() %>% 
+                     filter(hyp == "Hypothese 2" & k == input$prog9), 
+                 aes(x = k + .1, xend = k +.1, y = 0, yend = p, color = "#bc991b")) +
+    theme_minimal() +
+    geom_text(data = tibble(x = input$prog9, y = -.005, 
+                            text = paste("BF =", 
+                                         formatC(wkeit1()/wkeit2(), 
+                                                 format = "e", 
+                                                 digits = 2))),
+              aes(x, y, label = text)) +
+    xlab("Anzahl") + ylab("Wahrscheinlichkeit") +
+    ggtitle("Berechnung des Bayes-Faktors", "bei Punkthypothesen") +
+    scale_color_identity(name = "Marginal Likelihood",
+                         breaks = c("#bc1b9a", "#bc991b"),
+                         labels = c("Hyp. 1", "Hyp 2."),
+                         guide = "legend") +
+    theme(legend.position = "bottom")
+})
+
+### debug ######################################################################
+output$debug <- renderPrint({
+ data()
+})
+
+}
+
+shinyApp(ui = ui, server = server)
+```

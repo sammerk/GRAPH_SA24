@@ -1,0 +1,162 @@
+# The (Fully) Bayesian Estimation Aproach
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 800
+
+library(bslib)
+ui <- page_fluid(
+  theme = bs_theme(
+    # Controls the default grayscale palette
+   # bg = "#1bbc9d30",
+   # fg = "#B8BCC2",
+    "bg-dark" = "#1bbc9d50",
+    # Controls the accent (e.g., hyperlink, button, etc) colors
+    primary = "#1bbc9d",
+    secondary = "#1bbc9d",
+    "input-border-color" = "#1bbc9d"
+  ),
+  h5(""),
+  layout_column_wrap(
+    card(card_header(class = "bg-dark", "Prior"),
+         card_body(
+           sliderInput(
+             "prior_mu",
+             "Prior Mean",
+             min = 0,
+             max = 1,
+             value = .5,
+             step = .01
+           ),
+           sliderInput(
+             "prior_phi",
+             "Prior Precision",
+             min = 2,
+             max = 100,
+             value = 3,
+             step = 1
+           )
+         )),
+    card(card_header(class = "bg-dark", "Data"),
+         card_body(
+           numericInput(
+             "successes",
+             "n₁ = Zustimmung G9",
+             min = 0,
+             value = 13,
+             step = 1
+           ),
+           numericInput(
+             "failures",
+             "n₂ = Ablehnung G9",
+             min = 0,
+             value = 8,
+             step = 1
+           )
+         ))), 
+  card(card_header("Posterior", class = "bg-dark"),
+       card_body(plotOutput("plot")))
+)
+
+
+server <- function(input, output, session) {
+  
+### custom functions ###########################################################
+# muphi_to_shapes 
+muphi_to_shapes <- function(mu, phi) {
+  shape1 <- mu * phi
+  shape2 <- (1 - mu) * phi
+  return(list(shape1 = shape1, shape2 = shape2))
+}
+
+### aux variables ##############################################################
+# convert prior parameterization
+
+prior_shapes <- reactive({
+  muphi_to_shapes(input$prior_mu, input$prior_phi)
+})
+
+### plot #######################################################################
+output$plot <- renderPlot({
+  
+  # set x-axis
+  p <- seq(0,1, length=1000)
+  
+  # compute max-desity for ylim and legend position
+  density_max <-
+    max(c(
+      dbeta(p,
+            prior_shapes()$shape1,
+            prior_shapes()$shape2),
+      dbeta(
+        p,
+        prior_shapes()$shape1 + input$successes,
+        prior_shapes()$shape2 + input$failures
+      )
+    ))
+  
+  # compute lower bound of 96%-HPDI
+  hpdi_lb <-
+    qbeta(.02,
+           prior_shapes()$shape1 + input$successes,
+          prior_shapes()$shape2 + input$failures)
+  # compute upper bound of 96%-HPDI
+  hpdi_ub <-
+    qbeta(.98,
+          prior_shapes()$shape1 + input$successes,
+          prior_shapes()$shape2 + input$failures)
+  
+  # create plot
+  plot(
+    p,
+    dbeta(p,
+          prior_shapes()$shape1,
+          prior_shapes()$shape2),
+    type = 'l',
+    col = "#1bbc9d",
+    ylab = "Wahrscheinlichkeitsdichte",
+    xlab = "Anteil G9-Befürworter:innen",
+    frame.plot = F,
+    ylim = c(0, density_max)
+    )
+  lines(p,
+        dbeta(
+          p,
+          prior_shapes()$shape1 + input$successes,
+          prior_shapes()$shape2 + input$failures
+          ),
+          col = '#EA80FC'
+        )
+  polygon(c(hpdi_lb, hpdi_lb, hpdi_ub, hpdi_ub),
+          c(0, density_max/40, density_max/40, 0),
+          col = "#EA80FC30",
+          border = "#EA80FC00")
+  legend(
+    bty = "n",
+    .8,
+    density_max,
+    c('Prior', 'Posterior', '96% HPDI'),
+    lty = c(1, 1, 1),
+    lwd = c(1, 1, 8),
+    col = c('#1bbc9d', '#EA80FC', '#EA80FC30')
+  )
+
+})
+
+### debug ######################################################################
+# output$debug <- renderPrint({
+#   max(c(
+#                dbeta(p, 
+#                      prior_shapes()$shape1, 
+#                      prior_shapes()$shape2),
+#                dbeta(p, 
+#                      prior_shapes()$shape1 + input$successes, 
+#                      prior_shapes()$shape2 + input$failures))
+#              )
+#              
+# })
+
+}
+
+shinyApp(ui = ui, server = server)
+```

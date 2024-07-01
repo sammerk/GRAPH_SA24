@@ -1,0 +1,37 @@
+project:
+  type: book
+  output-dir: docs
+book:
+  title: GRAPH Sommerakdemie 24
+  subtitle: Bayesian Regression Modelling
+  search: false
+  author: 
+  - name: Samuel Merk
+    orcid: 0000-0003-2594-5337
+  date: today
+  chapters:
+  - index.qmd
+  - grundlegende_begriffe.qmd
+  - hypothesen_testen_vs_parameter_schaetzen.qmd
+  - fully_bayesian_estimation.qmd
+  - references.qmd
+  sidebar: 
+    logo: graph_logo.jpg
+    
+bibliography: references.bib
+csl: apa.csl
+
+format:
+  html:
+    theme: flatly
+    grid:
+      sidebar-width: 230px
+      body-width: 1100px
+      margin-width: 200px    
+    
+lang: de
+
+lightbox: false
+
+filters: 
+  - shinylive
