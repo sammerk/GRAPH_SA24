@@ -1,4 +1,52 @@
-# The (Fully) Bayesian Estimation Aproach
+# The (Fully) Bayesian Estimation Approach
+Im Gegensatz zum Bayes Factor werden im sogenannten Fully Bayesian Estimation Aproach keine Hypothesen gegeneinander abgewogen, sondern die Posterioriverteilung von Parametern direkt geschätzt. Hierzu wird nach dem Bayes Theorem die Likelihood-Funktion mit einer Prior-Verteilung multipliziert, um die Posterior-Verteilung zu erhalten. Diese wird dann durch eine Monte-Carlo-Simulation approximiert. Der Fully Bayesian Estimation Aproach ist in der Regel rechenintensiver als der Bayes Factor, da die Posterior-Verteilung für jeden Parameter geschätzt werden muss. Der Fully Bayesian Estimation Aproach ist jedoch flexibler und erlaubt es, die Unsicherheit in den Schätzungen direkt zu quantifizieren.  
+Diesem komplexen Verfahren nähern wir uns nun Schritt für Schritt - zunächst auf konzeptueller Ebene mit folgendem Experiment:
+
+::: {.panel-tabset}
+
+## Experiment {{< iconify fa6-solid dice >}}
+
+:::: {.columns}
+
+::: {.column width='45%'}
+[Zeichnet auf ein Schmierblatt einen Zahlenstrahl von 0 bis 1. Ich werde auf einem Glücksrad einen bestimmten Anteil als »Pro G9« kennzeichnen und den Rest als »Pro G8« - ihr wisst aber nicht wie groß welcher Anteil ist. Ihr könnt nur beobachten, wie oft das Glücksrad auf »Pro G9« und »Pro G8« landet. Nach jedem Drehen des Glücksrads, tragt ihr in den Zahlenstrahl ein, auf welchen Abschnitt ihr 1€ setzen würdet, angenommen wir spielen das folgende Spiel:]{style="color: #1bbc9d; font-size: .85em;"}
+
+> [»Wenn ihr falsch liegt, bekomme ich 1€, wenn ihr richtig liegt bekommt ihr $\frac{1}{\text{Länge eures Abschnitts}}$€«.]{style="color: #1bbc9d; font-size: .85em;"}
+:::
+
+::: {.column width='10%'}
+
+:::
+
+::: {.column width='45%'}
+![](img/Elicitation.png){}
+:::
+
+::::
+
+## Interpretation der Ergebnisse {{< iconify fa6-solid chart-line >}}
+
+::: 
+
+## Interaktive Visualisierung
+Der folgenden interaktiven Visualisierung ist als Prior eine Betaverteilung und als Likelihood eine Binomialverteilung vorgegeben. Wendet man Bayes Theorem auf die entsprechenden Funktionsvorschriften an kann man zeigen, dass als Posterior wieder eine Betaverteilung entsteht. Diesen seltenen Fall der analytischen (»geschlossenen«) Lösbarkeit nennt man conjugacy prior [@lambert2018].
+
+::: {.panel-tabset}
+
+## Aufgabe {{< iconify fa6-solid person-digging >}}
+Probiert aus, was in der folgenden interaktiven Visualisierung mit dem Posterior passiert,
+
+* wenn ein flacher Prior gewählt ist, der Anteil der G9-Befürworter:innen gleich bleibt, aber die Anzahl der Beobachtungen steigen (also z.B. n₁ = 2 & n₂ = 4; n₁ = 5 & n₂ = 10; n₁ = 23 & n₂ = 46; ...)
+* wenn ein präziser Prior gewählt ist, und die Anzahl der Beobachtungen klein ist
+* wenn ein präziser Prior gewählt ist, dessen Mittelwert »weit« vom Anteil der G9-Befürworter:innen entfernt ist und die Anzahl der Beobachtungen steigen
+
+
+## Lösungsvorschlag {{< iconify fa6-solid lightbulb >}}
+* Der Posterior ist vollständig durch die Daten getrieben. Der Modus des Posteriors ist gleich dem Anteil der G9-Befürworter:innen. Mit steigender Anzahl der Beobachtungen wird der Posterior schmaler, das HDI kleiner.
+* Der Posterior ist recht stark durch den Prior geprägt. 
+* Mit steigender Anzahl der Beobachtungen sinkt der Einfluss des Priors.
+
+:::
 
 ```{shinylive-r}
 #| standalone: true
@@ -135,7 +183,7 @@ output$plot <- renderPlot({
     bty = "n",
     .8,
     density_max,
-    c('Prior', 'Posterior', '96% HPDI'),
+    c('Prior', 'Posterior', '96% HDI'),
     lty = c(1, 1, 1),
     lwd = c(1, 1, 8),
     col = c('#1bbc9d', '#EA80FC', '#EA80FC30')

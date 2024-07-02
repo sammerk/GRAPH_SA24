@@ -63,6 +63,9 @@ div.csl-indent {
 <link href="site_libs/quarto-contrib/shinylive-0.2.3/shinylive/shinylive.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 <script src="site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "Keine Treffer",
@@ -161,7 +164,13 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./fully_bayesian_estimation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The (Fully) Bayesian Estimation Aproach</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The (Fully) Bayesian Estimation Approach</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bayesian_gaussian_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Bayesian (Gaussian) Regression</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -230,7 +239,7 @@ window.Quarto = {
 <p><strong>Inferenzstatistiken</strong> machen anhand von Daten Aussagen über (hypothetische) Mechanismen, die diese Daten erzeugen <span class="citation" data-cites="eid2013">(<a href="references.html#ref-eid2013" role="doc-biblioref">Eid, Gollwitzer, &amp; Schmitt, 2013</a>)</span> z.B. <em>»Befürworten von 100 zufällig ausgewählten Erwachsenen 63 Ziffernnoten in der Grundschule, wie sicher liegt dann eine Zustimmung (&gt; 50%) in der Gesamterwachsenenbevölkerung vor?«</em></p>
 </div>
 </div>
-<p><img src="img/ying yang-4.svg" class="img-fluid"></p>
+<p><a href="img/ying yang-4.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="img/ying yang-4.svg" class="img-fluid"></a></p>
 </section>
 <section id="schätzung-vs.-testung" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="schätzung-vs.-testung"><span class="header-section-number">2.2</span> Schätzung vs.&nbsp;Testung</h2>
@@ -303,13 +312,13 @@ BF=\frac{P\left(D \mid H_1\right)}{P\left(D\mid H_2\right)}\overset{\text{Bayes 
 <section id="berechnung-interpretation-im-minimalbeispiel" class="level3" data-number="2.4.2">
 <h3 data-number="2.4.2" class="anchored" data-anchor-id="berechnung-interpretation-im-minimalbeispiel"><span class="header-section-number">2.4.2</span> Berechnung &amp; Interpretation im Minimalbeispiel</h3>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Aufgabe <iconify-icon inline="" icon="fa6-solid:person-digging" aria-label="Icon person-digging from fa6-solid Iconify.design set." title="Icon person-digging from fa6-solid Iconify.design set."></iconify-icon></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Lösungshilfe</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Meine Rechnung</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Aufgabe <iconify-icon inline="" icon="fa6-solid:person-digging" aria-label="Icon person-digging from fa6-solid Iconify.design set." title="Icon person-digging from fa6-solid Iconify.design set."></iconify-icon></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Lösungshilfe <iconify-icon inline="" icon="fa6-solid:lightbulb" aria-label="Icon lightbulb from fa6-solid Iconify.design set." title="Icon lightbulb from fa6-solid Iconify.design set."></iconify-icon></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Meine Rechnung</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <p>Angenommen zwei Bildungspolitiker:innen streiten sich über die Verbreitung der Elternmeinung zur Befürwortung von G8 vs.&nbsp;G9. Die eine Politikerin behauptet, dass 45% der Eltern G9 befürworten, die andere Politikerin behauptet, dass 58% der Eltern G9 befürworten. In einer »Studie« wurden 4 Proband:innen befragt und genau drei davon waren pro G9 waren. Wie groß ist der Bayes Faktor?</p>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<p><img src="img/BF G9.png" class="img-fluid" style="width:50.0%"></p>
+<p><a href="img/BF G9.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="img/BF G9.png" class="img-fluid" style="width:50.0%"></a></p>
 </div>
 <div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
 <blockquote class="blockquote">
@@ -1225,12 +1234,37 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./fully_bayesian_estimation.html" class="pagination-link" aria-label="The (Fully) Bayesian Estimation Aproach">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The (Fully) Bayesian Estimation Aproach</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./fully_bayesian_estimation.html" class="pagination-link" aria-label="The (Fully) Bayesian Estimation Approach">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The (Fully) Bayesian Estimation Approach</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","loop":false,"closeEffect":"zoom","selector":".lightbox","descPosition":"bottom"});
+window.onload = () => {
+  lightboxQuarto.on('slide_before_load', (data) => {
+    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+    const href = trigger.getAttribute('href');
+    if (href !== null) {
+      const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+      if (imgEl !== null) {
+        const srcAttr = imgEl.getAttribute("src");
+        if (srcAttr && srcAttr.startsWith("data:")) {
+          slideConfig.href = srcAttr;
+        }
+      }
+    } 
+  });
+
+  lightboxQuarto.on('slide_after_load', (data) => {
+    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+    if (window.Quarto?.typesetMath) {
+      window.Quarto.typesetMath(slideNode);
+    }
+  });
+
+};
+          </script>
 
 
 

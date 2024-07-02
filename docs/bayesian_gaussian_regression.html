@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>GRAPH Sommerakdemie 24 – 3&nbsp; The (Fully) Bayesian Estimation Approach</title>
+<title>GRAPH Sommerakdemie 24 – 4&nbsp; Bayesian (Gaussian) Regression</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,33 +20,13 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
-<link href="./bayesian_gaussian_regression.html" rel="next">
-<link href="./hypothesen_testen_vs_parameter_schaetzen.html" rel="prev">
+<link href="./references.html" rel="next">
+<link href="./fully_bayesian_estimation.html" rel="prev">
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -57,12 +37,6 @@ div.csl-indent {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<meta name="shinylive:serviceworker_dir" content=".">
-<script src="site_libs/quarto-contrib/shinylive-0.2.3/shinylive/load-shinylive-sw.js" type="module"></script>
-<script src="site_libs/quarto-contrib/shinylive-0.2.3/shinylive/run-python-blocks.js" type="module"></script>
-<link href="site_libs/quarto-contrib/shinylive-0.2.3/shinylive/shinylive.css" rel="stylesheet">
-<link href="site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
-<script src="site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -123,7 +97,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./fully_bayesian_estimation.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The (Fully) Bayesian Estimation Approach</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./bayesian_gaussian_regression.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Bayesian (Gaussian) Regression</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Seitenleiste umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -163,13 +137,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./fully_bayesian_estimation.html" class="sidebar-item-text sidebar-link active">
+  <a href="./fully_bayesian_estimation.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The (Fully) Bayesian Estimation Approach</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./bayesian_gaussian_regression.html" class="sidebar-item-text sidebar-link">
+  <a href="./bayesian_gaussian_regression.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Bayesian (Gaussian) Regression</span></span></a>
   </div>
 </li>
@@ -189,7 +163,7 @@ window.Quarto = {
     <h2 id="toc-title">Inhaltsverzeichnis</h2>
    
   <ul>
-  <li><a href="#interaktive-visualisierung" id="toc-interaktive-visualisierung" class="nav-link active" data-scroll-target="#interaktive-visualisierung"><span class="header-section-number">3.1</span> Interaktive Visualisierung</a></li>
+  <li><a href="#worked-out-example" id="toc-worked-out-example" class="nav-link active" data-scroll-target="#worked-out-example"><span class="header-section-number">4.1</span> Worked out Example</a></li>
   </ul>
 </nav>
     </div>
@@ -198,7 +172,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The (Fully) Bayesian Estimation Approach</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Bayesian (Gaussian) Regression</span></h1>
 </div>
 
 
@@ -215,218 +189,100 @@ window.Quarto = {
 </header>
 
 
-<p>Im Gegensatz zum Bayes Factor werden im sogenannten Fully Bayesian Estimation Aproach keine Hypothesen gegeneinander abgewogen, sondern die Posterioriverteilung von Parametern direkt geschätzt. Hierzu wird nach dem Bayes Theorem die Likelihood-Funktion mit einer Prior-Verteilung multipliziert, um die Posterior-Verteilung zu erhalten. Diese wird dann durch eine Monte-Carlo-Simulation approximiert. Der Fully Bayesian Estimation Aproach ist in der Regel rechenintensiver als der Bayes Factor, da die Posterior-Verteilung für jeden Parameter geschätzt werden muss. Der Fully Bayesian Estimation Aproach ist jedoch flexibler und erlaubt es, die Unsicherheit in den Schätzungen direkt zu quantifizieren.<br>
-Diesem komplexen Verfahren nähern wir uns nun Schritt für Schritt - zunächst auf konzeptueller Ebene mit folgendem Experiment:</p>
+<p>Zentraler Teil des Workshops soll ja die bayesianische Regressionsanalyse sein. Der Begriff »Regression« ist sehr allgemein und umfasst eine Vielzahl von Modellen. In diesem Workshop werden wir mit dem starten, was in vielen sozialwissenschaftlichen Lehrbüchern als »lineare Regression« bezeichnet und oftmals wie folgt notiert wird:</p>
+<p><span class="math display">\[y_i = b_0 + b_1 x_i + \epsilon_i\]</span> <span class="math display">\[\epsilon_i \sim \mathcal{N}(0, \sigma^2)\]</span></p>
+<p>Im Kontext bayesianischer Regressionanalyse oder im Kontext des allgemeinen linearen Modells wird oft folgende Notation verwendet: <span class="math display">\[y_i \sim \mathcal{N}(\mu_i, \sigma^2) \]</span> <span class="math display">\[\mu_i = b_0 + b_1 x_i\]</span></p>
+<p>Die Idee ist, dass die abhängige Variable <span class="math inline">\(y_i\)</span> normalverteilt ist, wobei der Erwartungswert <span class="math inline">\(\mu_i\)</span> durch eine lineare Funktion der unabhängigen Variable <span class="math inline">\(x_i\)</span> bestimmt wird. Die Residuen <span class="math inline">\(\epsilon_i\)</span> sind normalverteilt mit einer konstanten Varianz <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>In der klassischen linearen Regression wird die Schätzung der Parameter <span class="math inline">\(b_0\)</span> und <span class="math inline">\(b_1\)</span> durch die Methode der kleinsten Quadrate (OLS) durchgeführt. In der bayesianischen Regression wird die Posterior-Verteilung <strong>dieser Parameter</strong> geschätzt.</p>
+<p>Um ein Gefühl für dieses Verfahren zu bekommen habe ich in den folgenden 3 Beispielen die gleichen wahren Regressionkoeffizienten zugrunde gelegt, für diese aber unterschiedlich viele Daten simuliert. Die wahre Regressionsgelichung lautet:</p>
+<p><span class="math display">\[y_i \sim \mathcal{N}(\mu_i, \sigma^2) \]</span> <span class="math display">\[\mu_i = 2 + .5 x_i + 0z_i\]</span></p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Experiment <iconify-icon inline="" icon="fa6-solid:dice" aria-label="Icon dice from fa6-solid Iconify.design set." title="Icon dice from fa6-solid Iconify.design set."></iconify-icon></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Interpretation der Ergebnisse <iconify-icon inline="" icon="fa6-solid:chart-line" aria-label="Icon chart-line from fa6-solid Iconify.design set." title="Icon chart-line from fa6-solid Iconify.design set."></iconify-icon></a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Beispiel 1: 100 Datenpunkte</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Beispiel 2: 9 Datenpunkte</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Beispiel 3: 25 Datenpunkte</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="columns">
-<div class="column" style="width:45%;">
-<p><span style="color: #1bbc9d; font-size: .85em;">Zeichnet auf ein Schmierblatt einen Zahlenstrahl von 0 bis 1. Ich werde auf einem Glücksrad einen bestimmten Anteil als »Pro G9« kennzeichnen und den Rest als »Pro G8« - ihr wisst aber nicht wie groß welcher Anteil ist. Ihr könnt nur beobachten, wie oft das Glücksrad auf »Pro G9« und »Pro G8« landet. Nach jedem Drehen des Glücksrads, tragt ihr in den Zahlenstrahl ein, auf welchen Abschnitt ihr 1€ setzen würdet, angenommen wir spielen das folgende Spiel:</span></p>
-<blockquote class="blockquote">
-<p><span style="color: #1bbc9d; font-size: .85em;">»Wenn ihr falsch liegt, bekomme ich 1€, wenn ihr richtig liegt bekommt ihr <span class="math inline">\(\frac{1}{\text{Länge eures Abschnitts}}\)</span>€«.</span></p>
-</blockquote>
-</div><div class="column" style="width:10%;">
-
-</div><div class="column" style="width:45%;">
-<p><a href="img/Elicitation.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="img/Elicitation.png" class="img-fluid"></a></p>
+<section id="die-daten" class="level3" data-number="4.0.1">
+<h3 data-number="4.0.1" class="anchored" data-anchor-id="die-daten"><span class="header-section-number">4.0.1</span> Die Daten</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="bayesian_gaussian_regression_files/figure-html/unnamed-chunk-3-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="bayesian_gaussian_regression_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
 </div>
 </div>
+</div>
+</section>
+<section id="die-posterior-verteilung-der-parameter" class="level3" data-number="4.0.2">
+<h3 data-number="4.0.2" class="anchored" data-anchor-id="die-posterior-verteilung-der-parameter"><span class="header-section-number">4.0.2</span> Die Posterior-Verteilung der Parameter</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="bayesian_gaussian_regression_files/figure-html/unnamed-chunk-4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="bayesian_gaussian_regression_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" style="width:60.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-
+<section id="die-daten-1" class="level3" data-number="4.0.3">
+<h3 data-number="4.0.3" class="anchored" data-anchor-id="die-daten-1"><span class="header-section-number">4.0.3</span> Die Daten</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="bayesian_gaussian_regression_files/figure-html/unnamed-chunk-6-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="bayesian_gaussian_regression_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
 </div>
 </div>
 </div>
-<section id="interaktive-visualisierung" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="interaktive-visualisierung"><span class="header-section-number">3.1</span> Interaktive Visualisierung</h2>
-<p>Der folgenden interaktiven Visualisierung ist als Prior eine Betaverteilung und als Likelihood eine Binomialverteilung vorgegeben. Wendet man Bayes Theorem auf die entsprechenden Funktionsvorschriften an kann man zeigen, dass als Posterior wieder eine Betaverteilung entsteht. Diesen seltenen Fall der analytischen (»geschlossenen«) Lösbarkeit nennt man conjugacy prior <span class="citation" data-cites="lambert2018">(<a href="references.html#ref-lambert2018" role="doc-biblioref">Lambert, 2018</a>)</span>.</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Aufgabe <iconify-icon inline="" icon="fa6-solid:person-digging" aria-label="Icon person-digging from fa6-solid Iconify.design set." title="Icon person-digging from fa6-solid Iconify.design set."></iconify-icon></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Lösungsvorschlag <iconify-icon inline="" icon="fa6-solid:lightbulb" aria-label="Icon lightbulb from fa6-solid Iconify.design set." title="Icon lightbulb from fa6-solid Iconify.design set."></iconify-icon></a></li></ul>
-<div class="tab-content">
-<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<p>Probiert aus, was in der folgenden interaktiven Visualisierung mit dem Posterior passiert,</p>
-<ul>
-<li>wenn ein flacher Prior gewählt ist, der Anteil der G9-Befürworter:innen gleich bleibt, aber die Anzahl der Beobachtungen steigen (also z.B. n₁ = 2 &amp; n₂ = 4; n₁ = 5 &amp; n₂ = 10; n₁ = 23 &amp; n₂ = 46; …)</li>
-<li>wenn ein präziser Prior gewählt ist, und die Anzahl der Beobachtungen klein ist</li>
-<li>wenn ein präziser Prior gewählt ist, dessen Mittelwert »weit« vom Anteil der G9-Befürworter:innen entfernt ist und die Anzahl der Beobachtungen steigen</li>
-</ul>
-</div>
-<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<ul>
-<li>Der Posterior ist vollständig durch die Daten getrieben. Der Modus des Posteriors ist gleich dem Anteil der G9-Befürworter:innen. Mit steigender Anzahl der Beobachtungen wird der Posterior schmaler, das HDI kleiner.</li>
-<li>Der Posterior ist recht stark durch den Prior geprägt.</li>
-<li>Mit steigender Anzahl der Beobachtungen sinkt der Einfluss des Priors.</li>
-</ul>
+</section>
+<section id="die-posterior-verteilung-der-parameter-1" class="level3" data-number="4.0.4">
+<h3 data-number="4.0.4" class="anchored" data-anchor-id="die-posterior-verteilung-der-parameter-1"><span class="header-section-number">4.0.4</span> Die Posterior-Verteilung der Parameter</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="bayesian_gaussian_regression_files/figure-html/unnamed-chunk-7-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="bayesian_gaussian_regression_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" style="width:60.0%"></a></p>
+</figure>
 </div>
 </div>
 </div>
-<pre class="shinylive-r" data-engine="r"><code>#| standalone: true
-#| viewerHeight: 800
-
-library(bslib)
-ui &lt;- page_fluid(
-  theme = bs_theme(
-    # Controls the default grayscale palette
-   # bg = "#1bbc9d30",
-   # fg = "#B8BCC2",
-    "bg-dark" = "#1bbc9d50",
-    # Controls the accent (e.g., hyperlink, button, etc) colors
-    primary = "#1bbc9d",
-    secondary = "#1bbc9d",
-    "input-border-color" = "#1bbc9d"
-  ),
-  h5(""),
-  layout_column_wrap(
-    card(card_header(class = "bg-dark", "Prior"),
-         card_body(
-           sliderInput(
-             "prior_mu",
-             "Prior Mean",
-             min = 0,
-             max = 1,
-             value = .5,
-             step = .01
-           ),
-           sliderInput(
-             "prior_phi",
-             "Prior Precision",
-             min = 2,
-             max = 100,
-             value = 3,
-             step = 1
-           )
-         )),
-    card(card_header(class = "bg-dark", "Data"),
-         card_body(
-           numericInput(
-             "successes",
-             "n₁ = Zustimmung G9",
-             min = 0,
-             value = 13,
-             step = 1
-           ),
-           numericInput(
-             "failures",
-             "n₂ = Ablehnung G9",
-             min = 0,
-             value = 8,
-             step = 1
-           )
-         ))), 
-  card(card_header("Posterior", class = "bg-dark"),
-       card_body(plotOutput("plot")))
-)
-
-
-server &lt;- function(input, output, session) {
-  
-### custom functions ###########################################################
-# muphi_to_shapes 
-muphi_to_shapes &lt;- function(mu, phi) {
-  shape1 &lt;- mu * phi
-  shape2 &lt;- (1 - mu) * phi
-  return(list(shape1 = shape1, shape2 = shape2))
-}
-
-### aux variables ##############################################################
-# convert prior parameterization
-
-prior_shapes &lt;- reactive({
-  muphi_to_shapes(input$prior_mu, input$prior_phi)
-})
-
-### plot #######################################################################
-output$plot &lt;- renderPlot({
-  
-  # set x-axis
-  p &lt;- seq(0,1, length=1000)
-  
-  # compute max-desity for ylim and legend position
-  density_max &lt;-
-    max(c(
-      dbeta(p,
-            prior_shapes()$shape1,
-            prior_shapes()$shape2),
-      dbeta(
-        p,
-        prior_shapes()$shape1 + input$successes,
-        prior_shapes()$shape2 + input$failures
-      )
-    ))
-  
-  # compute lower bound of 96%-HPDI
-  hpdi_lb &lt;-
-    qbeta(.02,
-           prior_shapes()$shape1 + input$successes,
-          prior_shapes()$shape2 + input$failures)
-  # compute upper bound of 96%-HPDI
-  hpdi_ub &lt;-
-    qbeta(.98,
-          prior_shapes()$shape1 + input$successes,
-          prior_shapes()$shape2 + input$failures)
-  
-  # create plot
-  plot(
-    p,
-    dbeta(p,
-          prior_shapes()$shape1,
-          prior_shapes()$shape2),
-    type = 'l',
-    col = "#1bbc9d",
-    ylab = "Wahrscheinlichkeitsdichte",
-    xlab = "Anteil G9-Befürworter:innen",
-    frame.plot = F,
-    ylim = c(0, density_max)
-    )
-  lines(p,
-        dbeta(
-          p,
-          prior_shapes()$shape1 + input$successes,
-          prior_shapes()$shape2 + input$failures
-          ),
-          col = '#EA80FC'
-        )
-  polygon(c(hpdi_lb, hpdi_lb, hpdi_ub, hpdi_ub),
-          c(0, density_max/40, density_max/40, 0),
-          col = "#EA80FC30",
-          border = "#EA80FC00")
-  legend(
-    bty = "n",
-    .8,
-    density_max,
-    c('Prior', 'Posterior', '96% HDI'),
-    lty = c(1, 1, 1),
-    lwd = c(1, 1, 8),
-    col = c('#1bbc9d', '#EA80FC', '#EA80FC30')
-  )
-
-})
-
-### debug ######################################################################
-# output$debug &lt;- renderPrint({
-#   max(c(
-#                dbeta(p, 
-#                      prior_shapes()$shape1, 
-#                      prior_shapes()$shape2),
-#                dbeta(p, 
-#                      prior_shapes()$shape1 + input$successes, 
-#                      prior_shapes()$shape2 + input$failures))
-#              )
-#              
-# })
-
-}
-
-shinyApp(ui = ui, server = server)</code></pre>
-
-
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
-<div id="ref-lambert2018" class="csl-entry" role="listitem">
-Lambert, B. (2018). <em>A Student’s Guide to <span>Bayesian</span> Statistics</em>. Los Angeles: SAGE.
+</section>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<section id="die-daten-2" class="level3" data-number="4.0.5">
+<h3 data-number="4.0.5" class="anchored" data-anchor-id="die-daten-2"><span class="header-section-number">4.0.5</span> Die Daten</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="bayesian_gaussian_regression_files/figure-html/unnamed-chunk-9-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="bayesian_gaussian_regression_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
 </div>
 </div>
+</div>
+</section>
+<section id="die-posterior-verteilung-der-parameter-2" class="level3" data-number="4.0.6">
+<h3 data-number="4.0.6" class="anchored" data-anchor-id="die-posterior-verteilung-der-parameter-2"><span class="header-section-number">4.0.6</span> Die Posterior-Verteilung der Parameter</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="bayesian_gaussian_regression_files/figure-html/unnamed-chunk-10-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="bayesian_gaussian_regression_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" style="width:60.0%"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+<section id="worked-out-example" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="worked-out-example"><span class="header-section-number">4.1</span> Worked out Example</h2>
+
+
 </section>
 
 </main> <!-- /main -->
@@ -852,18 +708,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./hypothesen_testen_vs_parameter_schaetzen.html" class="pagination-link" aria-label="Hypothesen testen vs. Parameter schätzen">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Hypothesen testen vs.&nbsp;Parameter schätzen</span></span>
+      <a href="./fully_bayesian_estimation.html" class="pagination-link" aria-label="The (Fully) Bayesian Estimation Approach">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The (Fully) Bayesian Estimation Approach</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./bayesian_gaussian_regression.html" class="pagination-link" aria-label="Bayesian (Gaussian) Regression">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Bayesian (Gaussian) Regression</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./references.html" class="pagination-link" aria-label="Literatur">
+        <span class="nav-page-text">Literatur</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","closeEffect":"zoom","selector":".lightbox","loop":false,"descPosition":"bottom"});
 window.onload = () => {
   lightboxQuarto.on('slide_before_load', (data) => {
     const { slideIndex, slideNode, slideConfig, player, trigger } = data;

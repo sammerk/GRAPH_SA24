@@ -83,7 +83,7 @@ Der Bayes Faktor ist also der Multiplikator (Faktor), der die Prior Odds in die 
 Angenommen zwei Bildungspolitiker:innen streiten sich über die Verbreitung der Elternmeinung zur Befürwortung von G8 vs. G9. Die eine Politikerin behauptet, dass 45% der Eltern G9 befürworten, die andere Politikerin behauptet, dass 58% der Eltern G9 befürworten. In einer »Studie« wurden 4 Proband:innen befragt und genau drei davon waren pro G9 waren. Wie groß ist der Bayes Faktor?
 
 
-## Lösungshilfe
+## Lösungshilfe {{< iconify fa6-solid lightbulb >}}
 
 ![](img/BF G9.png){width=50%}
 

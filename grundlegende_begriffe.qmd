@@ -31,10 +31,10 @@ Gefragt wird ja zu Beginn nach $P(\text{librarian}|\text{meek\;and\;tidy\;soul})
 Verallgemeinert kann man sagen dass Bayes Theorem die Wahrscheinlichkeit $P(\text{Hypothesis}|\text{Data})$ unter Verwendung der Wahrscheinlichkeit $P(\text{Data}|\text{Hypothesis})$ mit folgender Formel berechnet:
 
 $$
-{\overbracket[0.25pt]{P (\text{Hypothesis} \mid \text{Data})}^{\text{Posterior}}} = \frac
+\overbracket[0.25pt]{P (\text{Hypothesis} \mid \text{Data})}^{\text{Posterior}} = \frac
 {{\overbracket[0.25pt]{P (\text{Hypothesis})}^{\text{Prior}}} \times
 {\overbracket[0.25pt]{P (\text{Data} \mid \text{Hypothesis})}^{\text{Likelihood}}}}
-{{\underbracket[0.25pt]{{P(\text{E})}}_{\text{Average likelihood}}}}
+{{\underbracket[0.25pt]{{P(\text{Data})}}_{\text{Average likelihood}}}}
 $$
 
 

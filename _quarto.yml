@@ -14,6 +14,7 @@ book:
   - grundlegende_begriffe.qmd
   - hypothesen_testen_vs_parameter_schaetzen.qmd
   - fully_bayesian_estimation.qmd
+  - bayesian_gaussian_regression.qmd
   - references.qmd
   sidebar: 
     logo: graph_logo.jpg
@@ -31,7 +32,7 @@ format:
     
 lang: de
 
-lightbox: false
+lightbox: true
 
 filters: 
   - shinylive

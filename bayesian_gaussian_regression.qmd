@@ -1,0 +1,210 @@
+# Bayesian (Gaussian) Regression
+Zentraler Teil des Workshops soll ja die bayesianische Regressionsanalyse sein. Der Begriff »Regression« ist sehr allgemein und umfasst eine Vielzahl von Modellen. In diesem Workshop werden wir mit dem starten, was in vielen sozialwissenschaftlichen Lehrbüchern als »lineare Regression« bezeichnet und oftmals wie folgt notiert wird:
+
+$$y_i = b_0 + b_1 x_i + \epsilon_i$$
+$$\epsilon_i \sim \mathcal{N}(0, \sigma^2)$$
+
+Im Kontext bayesianischer Regressionanalyse oder im Kontext des allgemeinen linearen Modells wird oft folgende Notation verwendet:
+$$y_i \sim \mathcal{N}(\mu_i, \sigma^2) $$
+$$\mu_i = b_0 + b_1 x_i$$
+
+Die Idee ist, dass die abhängige Variable $y_i$ normalverteilt ist, wobei der Erwartungswert $\mu_i$ durch eine lineare Funktion der unabhängigen Variable $x_i$ bestimmt wird. Die Residuen $\epsilon_i$ sind normalverteilt mit einer konstanten Varianz $\sigma^2$.
+
+In der klassischen linearen Regression wird die Schätzung der Parameter $b_0$ und $b_1$ durch die Methode der kleinsten Quadrate (OLS) durchgeführt. In der bayesianischen Regression wird die Posterior-Verteilung **dieser Parameter** geschätzt. 
+
+Um ein Gefühl für dieses Verfahren zu bekommen habe ich in den folgenden 3 Beispielen die gleichen wahren Regressionkoeffizienten zugrunde gelegt, für diese aber unterschiedlich viele Daten simuliert. Die wahre Regressionsgelichung lautet:
+
+$$y_i \sim \mathcal{N}(\mu_i, \sigma^2) $$
+$$\mu_i = 2 + .5 x_i + 0z_i$$
+
+::: {.panel-tabset}
+
+## Beispiel 1: 100 Datenpunkte
+```{r}
+#| echo: false
+#| results: hide
+#| message: false
+library(brms)
+library(bayestestR)
+library(tidyverse)
+library(patchwork)
+```
+
+### Die Daten
+```{r}
+#| echo: false
+#| results: hide
+#| message: false
+#| warning: false
+#| cache: true
+
+set.seed(2505)
+
+data <- tibble(
+    x = rnorm(100),
+    y = 2 + .5 * x + rnorm(100),
+    z = rnorm(100)
+)
+
+reg1 <- 
+  ggplot(aes(x = x, y = y, color = z), data = data) +
+  geom_point() +
+  scale_color_gradient(low = "#1bbc9d", high = "#bc991b") +
+  stat_smooth(method = "lm", se = F, color = "#11111160") +
+  theme_minimal() +
+  ggtitle("Regression", "von x auf y") +
+  coord_fixed()
+
+reg2 <- 
+  ggplot(aes(x = x, y = z, color = y), data = data) +
+  geom_point() +
+  scale_color_gradient(low = "#1bbc9d", high = "#bc991b") +
+  stat_smooth(method = "lm", se = F, color = "#11111160") +
+  theme_minimal() +
+  ggtitle("Regression", "von x auf z") +
+  coord_fixed()
+
+mod0 <- brm(y ~ x + z, data = data)
+```
+
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+reg1 + reg2
+
+post1 <- plot(estimate_density(mod0), stack = F, priors = F) +
+         theme_minimal()
+```
+
+### Die Posterior-Verteilung der Parameter
+```{r}
+#| echo: false
+#| message: false
+#| out-width: 60%
+post1
+```
+
+
+
+## Beispiel 2: 9 Datenpunkte
+### Die Daten
+```{r}
+#| echo: false
+#| results: hide
+#| message: false
+#| warning: false
+#| cache: true
+
+set.seed(1983)
+
+data <- tibble(
+    x = rnorm(9),
+    y = 2 + .5 * x + rnorm(9),
+    z = rnorm(9)
+)
+
+reg1 <- 
+  ggplot(aes(x = x, y = y, color = z), data = data) +
+  geom_point() +
+  scale_color_gradient(low = "#1bbc9d", high = "#bc991b") +
+  stat_smooth(method = "lm", se = F, color = "#11111160") +
+  theme_minimal() +
+  ggtitle("Regression", "von x auf y") +
+  coord_fixed()
+
+reg2 <- 
+  ggplot(aes(x = x, y = z, color = y), data = data) +
+  geom_point() +
+  scale_color_gradient(low = "#1bbc9d", high = "#bc991b") +
+  stat_smooth(method = "lm", se = F, color = "#11111160") +
+  theme_minimal() +
+  ggtitle("Regression", "von x auf z") +
+  coord_fixed()
+
+mod0 <- brm(y ~ x + z, data = data)
+```
+
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+reg1 + reg2
+
+post1 <- plot(estimate_density(mod0), stack = F, priors = F) +
+         theme_minimal()
+```
+
+### Die Posterior-Verteilung der Parameter
+```{r}
+#| echo: false
+#| message: false
+#| out-width: 60%
+post1
+```
+
+
+
+## Beispiel 3: 25 Datenpunkte
+### Die Daten
+```{r}
+#| echo: false
+#| results: hide
+#| message: false
+#| warning: false
+#| cache: true
+
+set.seed(255)
+
+data <- tibble(
+    x = rnorm(25),
+    y = 2 + .5 * x + rnorm(25),
+    z = rnorm(25)
+)
+
+reg1 <- 
+  ggplot(aes(x = x, y = y, color = z), data = data) +
+  geom_point() +
+  scale_color_gradient(low = "#1bbc9d", high = "#bc991b") +
+  stat_smooth(method = "lm", se = F, color = "#11111160") +
+  theme_minimal() +
+  ggtitle("Regression", "von x auf y") +
+  coord_fixed()
+
+reg2 <- 
+  ggplot(aes(x = x, y = z, color = y), data = data) +
+  geom_point() +
+  scale_color_gradient(low = "#1bbc9d", high = "#bc991b") +
+  stat_smooth(method = "lm", se = F, color = "#11111160") +
+  theme_minimal() +
+  ggtitle("Regression", "von x auf z") +
+  coord_fixed()
+
+mod0 <- brm(y ~ x + z, data = data)
+```
+
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+reg1 + reg2
+
+post1 <- plot(estimate_density(mod0), stack = F, priors = F) +
+         theme_minimal()
+```
+
+### Die Posterior-Verteilung der Parameter
+```{r}
+#| echo: false
+#| message: false
+#| out-width: 60%
+post1
+```
+
+:::
+
+
+## Worked out Example

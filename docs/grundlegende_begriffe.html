@@ -134,8 +134,14 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./highest_density_intervals.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Highest Density Intervals (HDI)</span></span></a>
+  <a href="./fully_bayesian_estimation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">The (Fully) Bayesian Estimation Approach</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bayesian_gaussian_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Bayesian (Gaussian) Regression</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -218,10 +224,10 @@ Ist das Ereignis <span class="math inline">\(A\)</span> = <em>»Blaue Kugel im e
 <p>Gefragt wird ja zu Beginn nach <span class="math inline">\(P(\text{librarian}|\text{meek\;and\;tidy\;soul})\)</span> welche unter Verwendung der Wahrscheinlichkeit <span class="math inline">\(P(\text{meek\;and\;tidy\;soul}|\text{librarian})\)</span> berechnet wird.<br>
 Verallgemeinert kann man sagen dass Bayes Theorem die Wahrscheinlichkeit <span class="math inline">\(P(\text{Hypothesis}|\text{Data})\)</span> unter Verwendung der Wahrscheinlichkeit <span class="math inline">\(P(\text{Data}|\text{Hypothesis})\)</span> mit folgender Formel berechnet:</p>
 <p><span class="math display">\[
-{\overbracket[0.25pt]{P (\text{Hypothesis} \mid \text{Data})}^{\text{Posterior}}} = \frac
+\overbracket[0.25pt]{P (\text{Hypothesis} \mid \text{Data})}^{\text{Posterior}} = \frac
 {{\overbracket[0.25pt]{P (\text{Hypothesis})}^{\text{Prior}}} \times
 {\overbracket[0.25pt]{P (\text{Data} \mid \text{Hypothesis})}^{\text{Likelihood}}}}
-{{\underbracket[0.25pt]{{P(\text{E})}}_{\text{Average likelihood}}}}
+{{\underbracket[0.25pt]{{P(\text{Data})}}_{\text{Average likelihood}}}}
 \]</span></p>
 <p>Im YouTube-Beispiel haben wir gesehen wie Bayes Theorem auf ein Modell angewendet wird, das wir uns als Urne mit Kugeln zweier Farben vorstellen können, wobei eine Farbe Farmer und eien Farbe Librarians enkodiert.<br>
 In der Regressionsmodellierung wird Bayes Theorem benutzt um die Parameter eines Regressionsmodells zu spezifizieren. Nehmen wir an wir wollen modellieren mit welcher Vorbereitungszeit welcher Erfolg in einer Klausur einhergeht, könnten Prior (Predictions), Data &amp; Likelihood sowie Posterior (Predictions) wie folgt aussehen:</p>
