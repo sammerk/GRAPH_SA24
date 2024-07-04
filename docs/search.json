@@ -180,6 +180,26 @@
     ]
   },
   {
+    "objectID": "bayesian_poisson_regression.html",
+    "href": "bayesian_poisson_regression.html",
+    "title": "5  Bayesian Poisson Regression",
+    "section": "",
+    "text": "5.1 Vergleich von Normal und Poisson Verteilung",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Bayesian Poisson Regression</span>"
+    ]
+  },
+  {
+    "objectID": "bayesian_poisson_regression.html#vergleich-von-normal-und-poisson-verteilung",
+    "href": "bayesian_poisson_regression.html#vergleich-von-normal-und-poisson-verteilung",
+    "title": "5  Bayesian Poisson Regression",
+    "section": "",
+    "text": "Die Poissonverteilung ist eine diskrete Wahrscheinlichkeitsverteilung, die die Anzahl der Ereignisse modelliert, die in einem festen Zeitraum oder in einem festen Intervall auftreten. Die Poissonverteilung hat nur einen Parameter, \\(\\lambda\\), der die durchschnittliche Anzahl der Ereignisse pro Intervall angibt. Die Wahrscheinlichkeitsfunktion der Poissonverteilung ist gegeben durch\n\\[\nP_\\lambda(x)=\\frac{\\lambda^x}{x!} \\mathrm{e}^{-\\lambda}\n\\]\n\njstat = require('jstat')\nimport {Plot} from \"@mkfreeman/plot-tooltip\"\npoispdf = {\n  const x = d3.range(0, params[0] + 4*Math.sqrt(params[0]), 1);\n  const data = x.map(x =&gt; ({x: x, pdf: jstat.poisson.pdf(x, params[0])}));\n  return data\n}\npoiscdf = jstat.poisson.cdf(params[1], params[0]);\nviewof params = Inputs.form([\n      Inputs.range([0.1, 20], {value: 2, step: 0.1, label: tex`\\lambda:`})\n    ])\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nmoments = tex`\n\\begin{aligned}\n&\\mathrm{E}( X) =  \\lambda = ${params[0].toPrecision(3)} \\\\[0.5em]\n&\\mathrm{Var}( X) =  \\lambda  = ${params[0].toPrecision(3)} \n\\end{aligned}\n`\n\n\n\n\n\n\n\nplt_pdf = Plot.plot({\n    color: { \n      legend: false\n    },\n    x: {\n      label: \"x\",\n      axis: true\n    },\n    y: {\n      label: \"f(x)\",\n      axis: true\n    },\n  tooltip: {\n    fill: \"#1bbc9d\",\n    stroke: \"#1bbc9d\",\n    opacity: 1,\n  },\n    marks: [\n      Plot.ruleY([0]),\n      Plot.barY(poispdf,{x: \"x\", y: \"pdf\", fill: \"#1bbc9d\", strokeWidth: 0, opacity: 1,\n                title: (d) =&gt; `P(X=${d.x}) = ${(d.pdf).toPrecision(4)}`})\n    ]\n  })\n\n\n\n\n\n\n\n\n\nDie Normalverteilung ist eine kontinuierliche Wahrscheinlichkeitsverteilung, die die Addition unendlich vieler gleicher unabhängiger Verteilungen modelliert. Die Normalverteilung hat zwei Parameter, den Erwartungswert \\(\\mu\\) und die Standardabweichung \\(\\sigma\\). Die Wahrscheinlichkeitsfunktion der Normalverteilung ist gegeben durch\n\\[\nf(x) = \\frac{1}{\\sigma \\sqrt{2\\pi}} e^{-\\frac{1}{2} \\left(\\frac{x-\\mu}{\\sigma}\\right)^2}\n\\]\n\nviewof mu = Inputs.range([-3, 3], {\n  label: tex`\\mu`,\n  value: 0\n})\n\nviewof sigma = Inputs.range([1e-2, 2], {\n  label: tex`\\sigma`,\n  value: 0.4\n})\n\nhtml`&lt;style&gt;\ninput[type=\"range\"] {\n  /* Change the slider track color */\n  -webkit-appearance: none;\n  width: 100%;\n  height: 8px;\n  background: #1bbc9d50;\n  border-radius: 5px;\n  outline: none;\n  opacity: 0.7;\n  transition: opacity .15s ease-in-out;\n}\n\ninput[type=\"range\"]::-webkit-slider-thumb {\n  /* Change the slider thumb color */\n  -webkit-appearance: none;\n  appearance: none;\n  width: 15px;\n  height: 15px;\n  border-radius: 50%;\n  background: #1bbc9d;\n  cursor: pointer;\n}\n&lt;/style&gt;`\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nchart = {\n  const svg = d3.create(\"svg\").attr(\"width\", width).attr(\"height\", height);\n\n  const xAxis = svg\n    .append(\"g\")\n    .attr(\"transform\", `translate(0, ${yScale(0)})`)\n    .call(d3.axisBottom(xScale));\n\n  const yAxis = svg\n    .append(\"g\")\n    .attr(\"transform\", `translate(${xScale(0)}, 0)`)\n    .call(d3.axisLeft(yScale));\n\n  const path = svg\n    .append(\"g\")\n    .append(\"path\")\n    .attr(\"d\", line(data))\n    .attr(\"fill\", \"none\")\n    .attr(\"stroke\", \"#1bbc9d\");\n\n  return svg.node();\n}\n\n\n\n\n\n\n\nline = d3\n  .line()\n  .x((d) =&gt; xScale(d.x))\n  .y((d) =&gt; yScale(d.y))\n  \nyExtent = [0, Math.max(1, normalPdf(0, 0, sigma))]\n\ndata = x.map((x) =&gt; ({\n  x: x,\n  y: normalPdf(x, mu, sigma)\n}))\n\nx = d3\n  .range(numXPoints)\n  .map((i) =&gt; xExtent[0] + (i * (xExtent[1] - xExtent[0])) / (numXPoints - 1))\n  \n  yScale = d3\n  .scaleLinear()\n  .domain(yExtent)\n  .range([height - margin.bottom, margin.top])\n  \n  xScale = d3\n  .scaleLinear()\n  .domain(xExtent)\n  .range([margin.left, width - margin.right])\n  \n  xExtent = [Math.min(-3, mu - 3 * sigma), Math.max(3, mu + 3 * sigma)]\n  \n  margin = ({ top: 40, right: 40, bottom: 40, left: 40 })\n  \n  numXPoints = width / 2\n  \n  normalPdf = function (x, mu, sigma) {\n  return (\n    (1 / (sigma * Math.sqrt(2 * Math.PI))) *\n    Math.exp((-0.5 * Math.pow(x - mu, 2)) / (2 * Math.pow(sigma, 2)))\n  );\n}\n\nwidth = 350\nheight = 350",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Bayesian Poisson Regression</span>"
+    ]
+  },
+  {
     "objectID": "references.html",
     "href": "references.html",
     "title": "Literatur",
