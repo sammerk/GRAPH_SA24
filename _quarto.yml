@@ -15,6 +15,7 @@ book:
   - hypothesen_testen_vs_parameter_schaetzen.qmd
   - fully_bayesian_estimation.qmd
   - bayesian_gaussian_regression.qmd
+  - bayesian_poisson_regression.qmd
   - references.qmd
   sidebar: 
     logo: graph_logo.jpg

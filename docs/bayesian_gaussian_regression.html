@@ -20,12 +20,66 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
-<link href="./references.html" rel="next">
+<link href="./bayesian_poisson_regression.html" rel="next">
 <link href="./fully_bayesian_estimation.html" rel="prev">
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-html/quarto.js"></script>
@@ -37,6 +91,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -149,6 +204,12 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./bayesian_poisson_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Bayesian Poisson Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Literatur</span></a>
   </div>
@@ -163,7 +224,18 @@ window.Quarto = {
     <h2 id="toc-title">Inhaltsverzeichnis</h2>
    
   <ul>
-  <li><a href="#worked-out-example" id="toc-worked-out-example" class="nav-link active" data-scroll-target="#worked-out-example"><span class="header-section-number">4.1</span> Worked out Example</a></li>
+  <li><a href="#minimalbeispiel" id="toc-minimalbeispiel" class="nav-link active" data-scroll-target="#minimalbeispiel"><span class="header-section-number">4.1</span> Minimalbeispiel</a></li>
+  <li><a href="#worked-out-example-woe-1" id="toc-worked-out-example-woe-1" class="nav-link" data-scroll-target="#worked-out-example-woe-1"><span class="header-section-number">4.2</span> Worked out Example (WOE) 1:</a>
+  <ul class="collapse">
+  <li><a href="#datengrundlage" id="toc-datengrundlage" class="nav-link" data-scroll-target="#datengrundlage"><span class="header-section-number">4.2.1</span> Datengrundlage</a></li>
+  <li><a href="#datenimport" id="toc-datenimport" class="nav-link" data-scroll-target="#datenimport"><span class="header-section-number">4.2.2</span> Datenimport</a></li>
+  <li><a href="#ein-erstes-modell-mit-brms" id="toc-ein-erstes-modell-mit-brms" class="nav-link" data-scroll-target="#ein-erstes-modell-mit-brms"><span class="header-section-number">4.2.3</span> Ein erstes Modell mit <code>{brms}</code></a></li>
+  </ul></li>
+  <li><a href="#woe-2" id="toc-woe-2" class="nav-link" data-scroll-target="#woe-2"><span class="header-section-number">4.3</span> WOE 2:</a>
+  <ul class="collapse">
+  <li><a href="#datengrundlage-1" id="toc-datengrundlage-1" class="nav-link" data-scroll-target="#datengrundlage-1"><span class="header-section-number">4.3.1</span> Datengrundlage</a></li>
+  <li><a href="#datenimport-1" id="toc-datenimport-1" class="nav-link" data-scroll-target="#datenimport-1"><span class="header-section-number">4.3.2</span> Datenimport</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -189,6 +261,8 @@ window.Quarto = {
 </header>
 
 
+<section id="minimalbeispiel" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="minimalbeispiel"><span class="header-section-number">4.1</span> Minimalbeispiel</h2>
 <p>Zentraler Teil des Workshops soll ja die bayesianische Regressionsanalyse sein. Der Begriff »Regression« ist sehr allgemein und umfasst eine Vielzahl von Modellen. In diesem Workshop werden wir mit dem starten, was in vielen sozialwissenschaftlichen Lehrbüchern als »lineare Regression« bezeichnet und oftmals wie folgt notiert wird:</p>
 <p><span class="math display">\[y_i = b_0 + b_1 x_i + \epsilon_i\]</span> <span class="math display">\[\epsilon_i \sim \mathcal{N}(0, \sigma^2)\]</span></p>
 <p>Im Kontext bayesianischer Regressionanalyse oder im Kontext des allgemeinen linearen Modells wird oft folgende Notation verwendet: <span class="math display">\[y_i \sim \mathcal{N}(\mu_i, \sigma^2) \]</span> <span class="math display">\[\mu_i = b_0 + b_1 x_i\]</span></p>
@@ -200,8 +274,8 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Beispiel 1: 100 Datenpunkte</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Beispiel 2: 9 Datenpunkte</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Beispiel 3: 25 Datenpunkte</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<section id="die-daten" class="level3" data-number="4.0.1">
-<h3 data-number="4.0.1" class="anchored" data-anchor-id="die-daten"><span class="header-section-number">4.0.1</span> Die Daten</h3>
+<section id="die-daten" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="die-daten"><span class="header-section-number">4.1.1</span> Die Daten</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -212,8 +286,8 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="die-posterior-verteilung-der-parameter" class="level3" data-number="4.0.2">
-<h3 data-number="4.0.2" class="anchored" data-anchor-id="die-posterior-verteilung-der-parameter"><span class="header-section-number">4.0.2</span> Die Posterior-Verteilung der Parameter</h3>
+<section id="die-posterior-verteilung-der-parameter" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="die-posterior-verteilung-der-parameter"><span class="header-section-number">4.1.2</span> Die Posterior-Verteilung der Parameter</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -226,8 +300,8 @@ window.Quarto = {
 </section>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<section id="die-daten-1" class="level3" data-number="4.0.3">
-<h3 data-number="4.0.3" class="anchored" data-anchor-id="die-daten-1"><span class="header-section-number">4.0.3</span> Die Daten</h3>
+<section id="die-daten-1" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="die-daten-1"><span class="header-section-number">4.1.3</span> Die Daten</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -238,8 +312,8 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="die-posterior-verteilung-der-parameter-1" class="level3" data-number="4.0.4">
-<h3 data-number="4.0.4" class="anchored" data-anchor-id="die-posterior-verteilung-der-parameter-1"><span class="header-section-number">4.0.4</span> Die Posterior-Verteilung der Parameter</h3>
+<section id="die-posterior-verteilung-der-parameter-1" class="level3" data-number="4.1.4">
+<h3 data-number="4.1.4" class="anchored" data-anchor-id="die-posterior-verteilung-der-parameter-1"><span class="header-section-number">4.1.4</span> Die Posterior-Verteilung der Parameter</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -252,8 +326,8 @@ window.Quarto = {
 </section>
 </div>
 <div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
-<section id="die-daten-2" class="level3" data-number="4.0.5">
-<h3 data-number="4.0.5" class="anchored" data-anchor-id="die-daten-2"><span class="header-section-number">4.0.5</span> Die Daten</h3>
+<section id="die-daten-2" class="level3" data-number="4.1.5">
+<h3 data-number="4.1.5" class="anchored" data-anchor-id="die-daten-2"><span class="header-section-number">4.1.5</span> Die Daten</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -264,8 +338,8 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="die-posterior-verteilung-der-parameter-2" class="level3" data-number="4.0.6">
-<h3 data-number="4.0.6" class="anchored" data-anchor-id="die-posterior-verteilung-der-parameter-2"><span class="header-section-number">4.0.6</span> Die Posterior-Verteilung der Parameter</h3>
+<section id="die-posterior-verteilung-der-parameter-2" class="level3" data-number="4.1.6">
+<h3 data-number="4.1.6" class="anchored" data-anchor-id="die-posterior-verteilung-der-parameter-2"><span class="header-section-number">4.1.6</span> Die Posterior-Verteilung der Parameter</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -279,10 +353,296 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<section id="worked-out-example" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="worked-out-example"><span class="header-section-number">4.1</span> Worked out Example</h2>
+</section>
+<section id="worked-out-example-woe-1" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="worked-out-example-woe-1"><span class="header-section-number">4.2</span> Worked out Example (WOE) 1:</h2>
+<section id="datengrundlage" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="datengrundlage"><span class="header-section-number">4.2.1</span> Datengrundlage</h3>
+<p>Wir verwenden den Datensatz College Success aus der <a href="https://jasp-stats.org/wp-content/uploads/2019/11/The_JASP_Data_Library__version_2-1.pdf">Jasp Data Library</a>. Er wird dort wie folgt beschrieben:</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+College Success Data <iconify-icon inline="" icon="fa6-solid:database" aria-label="Icon database from fa6-solid Iconify.design set." title="Icon database from fa6-solid Iconify.design set."></iconify-icon>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>This data set, “College Success”, provides high school grades, SAT scores, and Grade Point Average of 224 university students.</p>
+<p>Variables:</p>
+<ul>
+<li>id - Participant ID.</li>
+<li>gpa - Grade Point Average (GPA) after three semester in college.</li>
+<li>hsm - Average high-school grade in mathematics.</li>
+<li>hss - Average high-school grade in science.</li>
+<li>hse - Average high-school grade in English.</li>
+<li>satm - SAT score for mathematics.</li>
+<li>satv - SAT score for verbal knowledge.</li>
+<li>sex - Gender (labels not available)</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="datenimport" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="datenimport"><span class="header-section-number">4.2.2</span> Datenimport</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data_college_success <span class="ot">&lt;-</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>(<span class="st">"https://bit.ly/merk-data-college-success"</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="ein-erstes-modell-mit-brms" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="ein-erstes-modell-mit-brms"><span class="header-section-number">4.2.3</span> Ein erstes Modell mit <code>{brms}</code></h3>
+<p>Zunächst wollen wir ein Modell fitten, das den College Succes (GPA) mit den Schulnoten vorhersagt.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>mod01 <span class="ot">&lt;-</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">brm</span>(<span class="fu">scale</span>(gpa) <span class="sc">~</span> <span class="fu">scale</span>(hsm) <span class="sc">+</span> <span class="fu">scale</span>(satm), </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> data_college_success,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">family =</span> <span class="fu">gaussian</span>(),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">cores =</span> <span class="dv">4</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Das Paket <code>{brms}</code> stellt »nur« ein <iconify-icon inline="" icon="fa-brands:r-project" aria-label="Icon r-project from fa-brands Iconify.design set." title="Icon r-project from fa-brands Iconify.design set."></iconify-icon>-Interface für die probabilistische Sprache Stan dar. Da keine priors explizit spezifiziert wurden, legt <code>{brms}</code> per default weakly informative Priors fest um aus diesen über die Likelihood der Daten die Posteriorverteilungen der Daten zu ermitteln. Dies geschieht allerdings nicht »geschlossen/analytisch« (also mit »Formeln«) sondern mit einer Monte-Carlo Methode (»Simulation«).<br>
+Die Algorithmen dieser Simulationen sind das computative Nadelöhr bayesianischer Inferenz und das zentrale Entwicklungsfeld mathematisch statistischer Forschung. Wir beschränken uns zunächst darauf, die Diagnostik dieser Simulation durchzuführen. Dazu wendet man die <code>plot</code>-Funktion auf das <code>{brms}</code>-Objekt an.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mod01)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="bayesian_gaussian_regression_files/figure-html/unnamed-chunk-13-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="bayesian_gaussian_regression_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Dieser Plot zeigt zum einen die Posteriorverteilung der geschätzen Parameter (links) sowie die Trajektorie jeder Chain des Algorithmus (rechts). Diese sollten sich <em>überlappen</em> und jeweils <em>keinen globalenTrend</em> zeigen.</p>
+<p>Der <code>summary</code>-Befehl liefert neben den Parameter und deren Credibility Intervallen zudem Information über die Qualität des Samplings (also der algorithmischen Approximation des Posteriors): Die Effective Sample Size (ESS) beschreibt die Anzahl der Posterior Draws bereinigt um deren Korrelation an. Der <span class="math inline">\(\widehat{R}\)</span> Wert dagegen vergleicht die Varianz zwischen mehreren Ketten mit der Varianz innerhalb jeder Kette. Wenn alle Ketten zur gleichen Verteilung konvergiert haben, sollten die Varianzen zwischen den Ketten und innerhalb der Ketten ungefähr gleich sein also <span class="math inline">\(\widehat{R}= 1\)</span>. Faustregeln geben of eine <span class="math inline">\(ESS &gt; 1000\)</span> <span class="citation" data-cites="burkner2017">(<a href="references.html#ref-burkner2017" role="doc-biblioref">Bürkner, 2017</a>)</span> und ein <span class="math inline">\(\widehat{R} &lt; 1.05\)</span> <span class="citation" data-cites="vehtari2021">(<a href="references.html#ref-vehtari2021" role="doc-biblioref">Vehtari, Gelman, Simpson, Carpenter, &amp; Bürkner, 2021</a>)</span> an. <code>{brms}</code> gibt allerdings auch Warnungen aus, sollten diese Werte problematisch sein.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod01)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: scale(gpa) ~ scale(hsm) + scale(satm) 
+   Data: data_college_success (Number of observations: 224) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Regression Coefficients:
+          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept     0.00      0.06    -0.11     0.12 1.00     4123     2799
+scalehsm      0.41      0.07     0.28     0.54 1.00     3423     2932
+scalesatm     0.07      0.07    -0.06     0.20 1.00     3645     2745
+
+Further Distributional Parameters:
+      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sigma     0.91      0.04     0.83     1.00 1.00     4042     2705
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+</div>
+</div>
+<p>Oft ist es aufschlussreich die Posteriors auf einer gemeinsamen Achse zu plotten:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">estimate_density</span>(mod01), <span class="at">stack =</span> F, <span class="at">priors =</span> F) <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>     <span class="fu">theme_minimal</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-collegeposteriors" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-collegeposteriors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="bayesian_gaussian_regression_files/figure-html/fig-collegeposteriors-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8" title="Abbildung&nbsp;4.1: Testcaption"><img src="bayesian_gaussian_regression_files/figure-html/fig-collegeposteriors-1.png" class="img-fluid figure-img" width="672"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-collegeposteriors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;4.1: Testcaption
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Da die Postriors im Gegensatz zu <em>p</em>-Werten und <span class="math inline">\(BF\)</span> tatsächlich bedingte Wahrscheinlichkeiten der <strong><em>Parameter</em></strong> darstellen, kann man nun ganz easy informative Aussagen machen wie</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Es liegt Evidenz für einen mindestens kleinen Effekt <span class="citation" data-cites="cohen1988">(<a href="references.html#ref-cohen1988" role="doc-biblioref">Cohen, 1988</a>)</span> der Mathematikschulnote vor
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hypothesis</span>(mod01, <span class="st">"scalehsm &gt; .1"</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hypothesis Tests for class b:
+           Hypothesis Estimate Est.Error CI.Lower CI.Upper Evid.Ratio Post.Prob
+1 (scalehsm)-(.1) &gt; 0     0.31      0.07     0.19     0.42        Inf         1
+  Star
+1    *
+---
+'CI': 90%-CI for one-sided and 95%-CI for two-sided hypotheses.
+'*': For one-sided hypotheses, the posterior probability exceeds 95%;
+for two-sided hypotheses, the value tested against lies outside the 95%-CI.
+Posterior probabilities of point hypotheses assume equal prior probabilities.</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Es liegt Evidenz für einen höchstens kleinen bis moderaten Effekt <span class="citation" data-cites="cohen1988">(<a href="references.html#ref-cohen1988" role="doc-biblioref">Cohen, 1988</a>)</span> des SAT-Mathematikwertes vor
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hypothesis</span>(mod01, <span class="st">"abs(scalesatm) &lt; .2"</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hypothesis Tests for class b:
+                Hypothesis Estimate Est.Error CI.Lower CI.Upper Evid.Ratio
+1 (abs(scalesatm))-... &lt; 0    -0.12      0.05    -0.19    -0.02      40.24
+  Post.Prob Star
+1      0.98    *
+---
+'CI': 90%-CI for one-sided and 95%-CI for two-sided hypotheses.
+'*': For one-sided hypotheses, the posterior probability exceeds 95%;
+for two-sided hypotheses, the value tested against lies outside the 95%-CI.
+Posterior probabilities of point hypotheses assume equal prior probabilities.</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Die Mathematikschulnote zeigte einen größeren Effekt als der Mathematik SAT-Score
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hypothesis</span>(mod01, <span class="st">"scalesatm &lt; scalehsm"</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hypothesis Tests for class b:
+                Hypothesis Estimate Est.Error CI.Lower CI.Upper Evid.Ratio
+1 (scalesatm)-(scal... &lt; 0    -0.34      0.12    -0.53    -0.15    1332.33
+  Post.Prob Star
+1         1    *
+---
+'CI': 90%-CI for one-sided and 95%-CI for two-sided hypotheses.
+'*': For one-sided hypotheses, the posterior probability exceeds 95%;
+for two-sided hypotheses, the value tested against lies outside the 95%-CI.
+Posterior probabilities of point hypotheses assume equal prior probabilities.</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Alle diese Aussagen kann man bereits im Plot der Posteriors (siehe <a href="#fig-collegeposteriors" class="quarto-xref">Abbildung&nbsp;<span>4.1</span></a>) »mit bloßem 👀« sehen.</p>
+</section>
+</section>
+<section id="woe-2" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="woe-2"><span class="header-section-number">4.3</span> WOE 2:</h2>
+<section id="datengrundlage-1" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="datengrundlage-1"><span class="header-section-number">4.3.1</span> Datengrundlage</h3>
+<p>Als zweites WOE wollen wir uns die Daten aus <span class="citation" data-cites="wagenmakers2015">Wagenmakers u.&nbsp;a. (<a href="references.html#ref-wagenmakers2015" role="doc-biblioref">2015</a>)</span> anschauen. Dieses Experiment stellt eine Replikation einer Studie dar, die postulierte, dass das »Rückwartsdrehen« von Gegenständen zu weniger »Offenheit« führt. Die Daten sind auf dem Open Science Framework <iconify-icon inline="" icon="academicons:osf" aria-label="Icon osf from academicons Iconify.design set." title="Icon osf from academicons Iconify.design set."></iconify-icon> unter <a href="https://osf.io/yvrzw">https://osf.io/yvrzw</a> verfügbar und sind dort wie folgt beschrieben</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Kitchen Rolls <iconify-icon inline="" icon="fa6-solid:database" aria-label="Icon database from fa6-solid Iconify.design set." title="Icon database from fa6-solid Iconify.design set."></iconify-icon>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>This data set, »Kitchen Rolls«, provides Openness to Experience scores for two groups of students - while filling out the personality questionnaire, both groups rotated a kitchen roll with their hands (one group clockwise, the other group counterclockwise).</p>
+<ul>
+<li>ParticipantNumber: participant number</li>
+<li>Condition:
+<ul>
+<li>1 = counterclockwise rotation &amp; answeroption “completely disagree” (helemaal oneens) on top of the screen</li>
+<li>2 = clockwise rotation &amp; “completely disagree” (helemaal oneens) on top of the screen</li>
+<li>3 = counterclockwise rotation &amp; “completely agree” (helemaal eens) on top of the screen</li>
+<li>4 = clockwise rotation &amp; “completely agree” (helemaal eens) on top of the screen</li>
+</ul></li>
+<li>q1_check: control question about pleasantness of the task: “How pleasant did you think this task was?” (“Hoe aangenaam vond je deze taak?”) 0 (not at all) (helemaal niet) - 10 (very much) (heel erg)</li>
+<li>q2_check: control question about effort: “Hoeveel moeite kostte deze taak je? 0 (heel weinig) -10 (heel veel)”</li>
+<li>q1_NEO: “I find philosophical discussion boring” (“Ik vind filosofische discussies saai”)</li>
+<li>q2_NEO: “I do not like poetry” (“Poezie doet mij weinig tot niets”)</li>
+<li>q3_NEO: “When I read a poem or look at a work of art, sometimes I feel chills or a wave of excitement” (” Wanneer ik een gedicht lees of naar een kunstwerk kijk, voel ik soms een koude rilling of een golf van opwinding”)</li>
+<li>q4_NEO: “I don’t like to spend my time daydreaming” (“Ik hou er niet van mijn tijd te verdoen met dagdromen”)</li>
+<li>q5_NEO: “I am intrigued by the patterns I find in art and nature” (“Ik ben geintrigeerd door de patronen die ik vind in de kunst en de natuur”)</li>
+<li>q6_NEO: “I think students are only confused and misled by listening to speakers with controversial ideas.” (“Ik vind dat leerlingen alleen maar verward en misleid worden door ze te laten luisteren naar sprekers met controversiele ideeen”)</li>
+<li>q7_NEO: “I often try new and foreign food” (“Ik probeer vaak nieuwe en buitenlandse gerechten”)</li>
+<li>q8_NEO: “I rarely notice de moods or feelings, evoked by different environments” (“Ik merk zelden de stemmingen of gevoelens op, die verschillende omgevingen oproepen”)</li>
+<li>q9_NEO: “I think we can expect decisions regarding moral issues to be taken by our religious leaders” (“Ik vind dat we beslissingen in morele zaken van onze religieuze leiders mogen verwachten”)</li>
+<li>q10_NEO: “I am not very interested in speculating about the nature of the universe or of humankind” (“Ik ben niet erg geinteresseerd in het speculeren over het wezen van het universum of van de mens”)</li>
+<li>q11_NEO: “I am eager to learn” (“Ik ben leergierig”)</li>
+<li>q12_NEO: “I like playing with theories or abstract ideas” (“Ik heb vaak plezier in het spelen met theorieen of abstracte ideeen”)</li>
+<li>mean_NEO: average of the 12 NEO-items. The higher the score, the more openness to experience</li>
+<li>q3_ check: Control question for mood: “At this moment, how do you feel?” (Hoe voel je je op dit moment?“) 0: very bad (heel slecht) - 10: very good (heel goed)</li>
+<li>q4_check: Control question for arousal: “At this moment, how aroused are you?” (“Hoe geprikkeld ben je op dit moment?”) 0: very relaxed (heel ontspannen) - 10 very aroused (heel geprikkeld)</li>
+<li>Include: TRUE if included in the analysis, FALSE if not (see below for reasons of exclusion)</li>
+<li>Rotation: rotation direction (clockwise or counter-clockwise)</li>
+<li>Age: age</li>
+<li>Sex: female/male</li>
+<li>Student: yes if student, no if not</li>
+<li>Major.Occupation: The major (study) or the occupation of the participants</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="datenimport-1" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="datenimport-1"><span class="header-section-number">4.3.2</span> Datenimport</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data_kitchen_rolls <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://osf.io/download/yvrzw/"</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 102 Columns: 25
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (4): Rotation, Sex, Student, Major.Occupation
+dbl (20): ParticipantNumber, Condition, q1_check, q2_check, q1_NEO, q2_NEO, ...
+lgl  (1): Include
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-burkner2017" class="csl-entry" role="listitem">
+Bürkner, P.-C. (2017). <a href="https://doi.org/10.18637/jss.v080.i01">Brms: <span>An R Package</span> for <span>Bayesian Multilevel Models Using Stan</span></a>. <em>Journal of Statistical Software</em>, <em>80</em>(1).
+</div>
+<div id="ref-cohen1988" class="csl-entry" role="listitem">
+Cohen, J. (1988). <em>Statistical Power Analysis for the Behavioral Sciences</em> (2. Aufl.). <span>New Jersey</span>: <span>Lawrence Erlbaum</span>.
+</div>
+<div id="ref-vehtari2021" class="csl-entry" role="listitem">
+Vehtari, A., Gelman, A., Simpson, D., Carpenter, B., &amp; Bürkner, P.-C. (2021). <a href="https://doi.org/10.1214/20-BA1221">Rank-<span>Normalization</span>, <span>Folding</span>, and <span>Localization</span>: <span>An Improved R<span>^</span></span> for <span>Assessing Convergence</span> of <span>MCMC</span> (with <span>Discussion</span>)</a>. <em>Bayesian Analysis</em>, <em>16</em>(2).
+</div>
+<div id="ref-wagenmakers2015" class="csl-entry" role="listitem">
+Wagenmakers, E.-J., Beek, T. F., Rotteveel, M., Gierholz, A., Matzke, D., Steingroever, H., … Pinto, Y. (2015). <a href="https://doi.org/10.3389/fpsyg.2015.00494">Turning the Hands of Time Again: <span>A</span> Purely Confirmatory Replication Study and a <span>Bayesian</span> Analysis</a>. <em>Frontiers in Psychology</em>, <em>6</em>.
+</div>
+</div>
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -713,13 +1073,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link" aria-label="Literatur">
-        <span class="nav-page-text">Literatur</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./bayesian_poisson_regression.html" class="pagination-link" aria-label="Bayesian Poisson Regression">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Bayesian Poisson Regression</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","descPosition":"bottom","closeEffect":"zoom","loop":false});
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","descPosition":"bottom","loop":false,"closeEffect":"zoom","openEffect":"zoom"});
 window.onload = () => {
   lightboxQuarto.on('slide_before_load', (data) => {
     const { slideIndex, slideNode, slideConfig, player, trigger } = data;

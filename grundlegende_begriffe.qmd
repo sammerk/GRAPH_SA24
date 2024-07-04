@@ -25,7 +25,7 @@ Ist das Ereignis $A$ = *»Blaue Kugel im ersten Zug«*, $B$ = *»grüne Kugel im
  
 ### Dynamische Veranschaulichung
 Die beste dynamische Visualisierung zur Erklärung des Bayes Theorems, die ich kenne, ist die folgende:
-{{< video https://youtu.be/HZGCoVF3YvM?si=0UGmZC_T2966oYpH width="450" height="250" >}}
+{{< video https://youtu.be/HZGCoVF3YvM?si=0UGmZC_T2966oYpH width="600" height="360" >}}
 
 Gefragt wird ja zu Beginn nach $P(\text{librarian}|\text{meek\;and\;tidy\;soul})$ welche unter Verwendung der Wahrscheinlichkeit $P(\text{meek\;and\;tidy\;soul}|\text{librarian})$ berechnet wird.  
 Verallgemeinert kann man sagen dass Bayes Theorem die Wahrscheinlichkeit $P(\text{Hypothesis}|\text{Data})$ unter Verwendung der Wahrscheinlichkeit $P(\text{Data}|\text{Hypothesis})$ mit folgender Formel berechnet:

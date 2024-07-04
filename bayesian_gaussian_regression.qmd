@@ -1,4 +1,5 @@
 # Bayesian (Gaussian) Regression
+## Minimalbeispiel
 Zentraler Teil des Workshops soll ja die bayesianische Regressionsanalyse sein. Der Begriff »Regression« ist sehr allgemein und umfasst eine Vielzahl von Modellen. In diesem Workshop werden wir mit dem starten, was in vielen sozialwissenschaftlichen Lehrbüchern als »lineare Regression« bezeichnet und oftmals wie folgt notiert wird:
 
 $$y_i = b_0 + b_1 x_i + \epsilon_i$$
@@ -207,4 +208,146 @@ post1
 :::
 
 
-## Worked out Example
+
+
+## Worked out Example (WOE) 1: 
+### Datengrundlage
+Wir verwenden den Datensatz College Success aus der [Jasp Data Library](https://jasp-stats.org/wp-content/uploads/2019/11/The_JASP_Data_Library__version_2-1.pdf). Er wird dort wie folgt beschrieben:
+
+:::{.callout-note collapse=false appearance='default' icon=false}
+## College Success Data {{< iconify fa6-solid database >}}
+This data set, "College Success", provides high school grades, SAT scores, and Grade Point Average of 224 university students.
+
+Variables:
+
+* id - Participant ID.
+* gpa - Grade Point Average (GPA) after three semester in college.
+* hsm - Average high-school grade in mathematics.
+* hss - Average high-school grade in science.
+* hse - Average high-school grade in English.
+* satm - SAT score for mathematics.
+* satv - SAT score for verbal knowledge.
+* sex - Gender (labels not available)
+:::
+
+
+### Datenimport
+```{r}
+#| message: false
+data_college_success <- 
+  read_csv("https://bit.ly/merk-data-college-success")
+```
+
+### Ein erstes Modell mit `{brms}`
+Zunächst wollen wir ein Modell fitten, das den College Succes (GPA) mit den Schulnoten vorhersagt. 
+
+```{r}
+#| message: false
+#| results: hide
+#| cache: true
+library(brms)
+mod01 <- 
+    brm(scale(gpa) ~ scale(hsm) + scale(satm), 
+        data = data_college_success,
+        family = gaussian(),
+        cores = 4)
+```
+
+Das Paket `{brms}` stellt »nur« ein  {{< iconify fa-brands r-project >}}-Interface für die probabilistische Sprache Stan dar. Da keine priors explizit spezifiziert wurden, legt `{brms}` per default weakly informative Priors fest um aus diesen über die Likelihood der Daten die Posteriorverteilungen der Daten zu ermitteln. Dies geschieht allerdings nicht »geschlossen/analytisch« (also mit »Formeln«) sondern mit einer Monte-Carlo Methode (»Simulation«).  
+Die Algorithmen dieser Simulationen sind das computative Nadelöhr bayesianischer Inferenz und das zentrale Entwicklungsfeld mathematisch statistischer Forschung. Wir beschränken uns zunächst darauf, die Diagnostik dieser Simulation durchzuführen. Dazu wendet man die `plot`-Funktion auf das `{brms}`-Objekt an.
+```{r}
+#| fig-height: 8
+plot(mod01)
+```
+
+Dieser Plot zeigt zum einen die Posteriorverteilung der geschätzen Parameter (links) sowie die Trajektorie jeder Chain des Algorithmus (rechts). Diese sollten sich *überlappen* und jeweils *keinen globalenTrend* zeigen.
+
+Der `summary`-Befehl liefert neben den Parameter und deren Credibility Intervallen zudem Information über die Qualität des Samplings (also der algorithmischen Approximation des Posteriors): Die Effective Sample Size (ESS) beschreibt die Anzahl der Posterior Draws bereinigt um deren Korrelation an. Der $\widehat{R}$ Wert dagegen vergleicht die Varianz zwischen mehreren Ketten mit der Varianz innerhalb jeder Kette. Wenn alle Ketten zur gleichen Verteilung konvergiert haben, sollten die Varianzen zwischen den Ketten und innerhalb der Ketten ungefähr gleich sein also $\widehat{R}= 1$. Faustregeln geben of eine $ESS > 1000$ [@burkner2017] und ein $\widehat{R} < 1.05$ [@vehtari2021] an. `{brms}` gibt allerdings auch Warnungen aus, sollten diese Werte problematisch sein.
+
+```{r}
+summary(mod01)
+```
+
+Oft ist es aufschlussreich die Posteriors auf einer gemeinsamen Achse zu plotten:
+
+```{r}
+#| fig-height: 4
+#| label: fig-collegeposteriors
+#| fig-cap: Testcaption
+plot(estimate_density(mod01), stack = F, priors = F) +
+     theme_minimal()
+```
+
+
+Da die Postriors im Gegensatz zu *p*-Werten und $BF$ tatsächlich bedingte Wahrscheinlichkeiten der ***Parameter*** darstellen, kann man nun ganz easy informative Aussagen machen wie 
+
+:::{.callout-note collapse=false appearance='default' icon=false}
+## Es liegt Evidenz für einen mindestens kleinen Effekt [@cohen1988] der Mathematikschulnote vor
+```{r}
+hypothesis(mod01, "scalehsm > .1")
+```
+:::
+
+
+:::{.callout-note collapse=false appearance='default' icon=false}
+## Es liegt Evidenz für einen höchstens kleinen bis moderaten Effekt [@cohen1988] des SAT-Mathematikwertes vor
+```{r}
+hypothesis(mod01, "abs(scalesatm) < .2")
+```
+:::
+
+:::{.callout-note collapse=false appearance='default' icon=false}
+## Die Mathematikschulnote zeigte einen größeren Effekt als der Mathematik SAT-Score
+```{r}
+hypothesis(mod01, "scalesatm < scalehsm")
+```
+:::
+
+Alle diese Aussagen kann man bereits im Plot der Posteriors (siehe @fig-collegeposteriors) »mit bloßem 👀« sehen.
+
+## WOE 2: 
+
+### Datengrundlage
+Als zweites WOE wollen wir uns die Daten aus @wagenmakers2015 anschauen. Dieses Experiment stellt eine Replikation einer Studie dar, die postulierte, dass das »Rückwartsdrehen« von Gegenständen zu weniger »Offenheit« führt. Die Daten sind auf dem Open Science Framework {{< iconify academicons osf >}} unter [https://osf.io/yvrzw](https://osf.io/yvrzw) verfügbar und sind dort wie folgt beschrieben
+
+:::{.callout-note collapse=false appearance='default' icon=false}
+## Kitchen Rolls {{< iconify fa6-solid database >}}
+
+This data set, »Kitchen Rolls«, provides Openness to Experience scores for two groups of students - while filling out the personality questionnaire, both groups rotated a kitchen roll with their hands (one group clockwise, the other group counterclockwise).
+
+* ParticipantNumber: participant number
+* Condition: 
+    * 1 = counterclockwise rotation & answeroption "completely disagree" (helemaal oneens) on top of the screen
+    * 2 = clockwise rotation & "completely disagree" (helemaal oneens) on top of the screen 
+    * 3 = counterclockwise rotation & "completely agree" (helemaal eens) on top of the screen
+    * 4 = clockwise rotation & "completely agree" (helemaal eens) on top of the screen
+* q1_check: control question about pleasantness of the task: "How pleasant did you think this task was?" ("Hoe aangenaam vond je deze taak?") 0 (not at all) (helemaal niet) - 10 (very much) (heel erg)
+* q2_check: control question about effort: "Hoeveel moeite kostte deze taak je? 0 (heel weinig) -10 (heel veel)"
+* q1_NEO: "I find philosophical discussion boring" ("Ik vind filosofische discussies saai")
+* q2_NEO: "I do not like poetry" ("Poezie doet mij weinig tot niets")
+* q3_NEO: "When I read a poem or look at a work of art, sometimes I feel chills or a wave of excitement" (" Wanneer ik een gedicht lees of naar een kunstwerk kijk, voel ik soms een koude rilling of een golf van opwinding")
+* q4_NEO: "I don't like to spend my time daydreaming" ("Ik hou er niet van mijn tijd te verdoen met dagdromen")
+* q5_NEO: "I am intrigued by the patterns I find in art and nature" ("Ik ben geintrigeerd door de patronen die ik vind in de kunst en de natuur")
+*  q6_NEO: "I think students are only confused and misled by listening to speakers with controversial ideas." ("Ik vind dat leerlingen alleen maar verward en misleid worden door ze te laten luisteren naar sprekers met controversiele ideeen")
+* q7_NEO: "I often try new and foreign food" ("Ik probeer vaak nieuwe en buitenlandse gerechten")
+* q8_NEO: "I rarely notice de moods or feelings, evoked by different environments" ("Ik merk zelden de stemmingen of gevoelens op, die verschillende omgevingen oproepen")
+* q9_NEO: "I think we can expect decisions regarding moral issues to be taken by our religious leaders" ("Ik vind dat we beslissingen in morele zaken van onze religieuze leiders mogen verwachten")
+* q10_NEO: "I am not very interested in speculating about the nature of the universe or of humankind" ("Ik ben niet erg geinteresseerd in het speculeren over het wezen van het universum of van de mens")
+* q11_NEO: "I am eager to learn" ("Ik ben leergierig")
+* q12_NEO: "I like playing with theories or abstract ideas" ("Ik heb vaak plezier in het spelen met theorieen of abstracte ideeen")
+* mean_NEO: average of the 12 NEO-items. The higher the score, the more openness to experience
+* q3_ check: Control question for mood: "At this moment, how do you feel?" (Hoe voel je je op dit moment?") 0: very bad (heel slecht) - 10: very good (heel goed) 
+* q4_check: Control question for arousal: "At this moment, how aroused are you?" ("Hoe geprikkeld ben je op dit moment?") 0: very relaxed (heel ontspannen) - 10 very aroused (heel geprikkeld)
+* Include: TRUE if included in the analysis, FALSE if not (see below for reasons of exclusion)
+* Rotation: rotation direction (clockwise or counter-clockwise)
+* Age: age
+* Sex: female/male
+* Student: yes if student, no if not
+* Major.Occupation: The major (study) or the occupation of the participants
+:::
+
+### Datenimport
+```{r}
+data_kitchen_rolls <- read_csv("https://osf.io/download/yvrzw/")
+```
+
