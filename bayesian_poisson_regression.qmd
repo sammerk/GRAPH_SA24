@@ -185,11 +185,65 @@ x = d3
 width = 350
 height = 350
 ```
-
-
-
 :::
 
 ::::
 
+## WOE 1: Liegestützen 
+```{r}
+#| cache: true
 
+library(ggdist)
+library(tidyverse)
+N <- 1000
+data_lieg <- 
+  tibble(Alter_n = round(runif(N, 5, 18), 0),
+         Alter = as.factor(Alter_n),
+         lieg_male = rpois(N, Alter_n + 3) + sample(c(-1,1),1)*rpois(N, 3),
+         lieg_female = lieg_male +sample(c(-1,1),1)*rpois(N, 3)) %>% 
+  filter(lieg_male > 0 & lieg_female > 0) %>% 
+  pivot_longer(cols = c(lieg_male, lieg_female),
+               names_to = "Geschlecht",
+               values_to = "Liegestutzen") %>% 
+  mutate(Geschlecht = ifelse(Geschlecht == "lieg_male",
+                             "male", "female"))
+```
+
+:::{.callout-note collapse=false appearance='default' icon=false}
+## Liegestützen {{< iconify fa6-solid database >}}
+
+Dieses entlang der MoMo-Studie generierte Datenset enthält die Anzahl der Liegestützen, die von 5-18-jährigen Kindern in einem bestimmten Intervall gelistet werden. Die Daten enthalten die folgenden Variablen:
+
+* Alter_n_: Alter der Kinder `numric`
+* Alter: Alter der Kinder `factor`
+* Geschlecht: Geschlecht der Kinder
+* Liegestützen: Anzahl der Liegestützen, die von den Kindern gemacht wurden
+:::
+
+
+```{r}
+#| cache: true
+#| results: "hide"
+#| echo: false
+#| 
+ggplot(data_lieg, aes(x = as.factor(Alter), y = Liegestutzen)) +
+  geom_jitter()
+
+ggplot(data_lieg, aes(x = Alter, y = Liegestutzen)) +
+  stat_slabinterval() +
+  facet_wrap(~Geschlecht, ncol = 1) +
+  theme_minimal()
+
+mod3 <- glm(Liegestutzen ~ Geschlecht, 
+            data = data_lieg,
+            family = poisson())
+```
+
+
+## Das Modell
+$$
+Liegestuetzen_i \sim \operatorname{Poisson}(\lambda_i)
+$$
+$$
+\operatorname{log}\left(\lambda_i\right) = b_0 + b_1 \cdot Geschlecht_i + \dots       
+$$

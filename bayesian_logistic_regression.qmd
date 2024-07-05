@@ -1,0 +1,37 @@
+# Bayesian Logistic Regression
+
+## WOE 1: Graduate School Admission
+
+
+### Datengrundlage
+Wir verwenden den Datensatz Graduate Schoole Admission aus dem {{< iconify fa-brands r-project >}}-Paket `{ProbBayes}`. Er wird dort wie folgt beschrieben:
+
+:::{.callout-note collapse=false appearance='default' icon=false}
+## Graduate Schoole Admission {{< iconify fa6-solid database >}}
+A data frame with 400 observations on the following 3 variables.
+
+* Admission: student was admitted (1) or not admitted (0)
+* GRE: GRE score
+* GPA: grade point average
+:::
+
+### Datenimport
+```{r}
+#| message: false
+library(ProbBayes)
+```
+
+
+## Das Modell
+$$
+Admisson_i \sim \operatorname{Bernoulli}(\theta_i)
+$$
+
+$$
+\begin{aligned}
+\operatorname{logit}(\theta_i) &= b_0 + b_1 \cdot GRE_i + b_2 \cdot GPA_i \\
+\operatorname{log}\left( \frac{\theta_i}{1-\theta_i} \right) &= b_0 + b_1 \cdot GRE_i + b_2 \cdot GPA_i
+\end{aligned}
+$$
+
+

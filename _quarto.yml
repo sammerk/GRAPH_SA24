@@ -16,6 +16,7 @@ book:
   - fully_bayesian_estimation.qmd
   - bayesian_gaussian_regression.qmd
   - bayesian_poisson_regression.qmd
+  - bayesian_logistic_regression.qmd
   - references.qmd
   sidebar: 
     logo: graph_logo.jpg

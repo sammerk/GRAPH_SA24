@@ -13,7 +13,7 @@ Die Idee ist, dass die abhängige Variable $y_i$ normalverteilt ist, wobei der E
 
 In der klassischen linearen Regression wird die Schätzung der Parameter $b_0$ und $b_1$ durch die Methode der kleinsten Quadrate (OLS) durchgeführt. In der bayesianischen Regression wird die Posterior-Verteilung **dieser Parameter** geschätzt. 
 
-Um ein Gefühl für dieses Verfahren zu bekommen habe ich in den folgenden 3 Beispielen die gleichen wahren Regressionkoeffizienten zugrunde gelegt, für diese aber unterschiedlich viele Daten simuliert. Die wahre Regressionsgelichung lautet:
+Um ein Gefühl für dieses Verfahren zu bekommen habe ich in den folgenden 3 Beispielen die gleichen wahren Regressionkoeffizienten zugrunde gelegt, für diese aber unterschiedlich viele Daten simuliert. Das wahre Regressionsmodell in lautet (in der Notation von Gelman & Hill @gelman2007):
 
 $$y_i \sim \mathcal{N}(\mu_i, \sigma^2) $$
 $$\mu_i = 2 + .5 x_i + 0z_i$$

@@ -59,7 +59,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
-<link href="./references.html" rel="next">
+<link href="./bayesian_logistic_regression.html" rel="next">
 <link href="./bayesian_gaussian_regression.html" rel="prev">
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-html/quarto.js"></script>
@@ -71,6 +71,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "language": {
     "search-no-results-text": "Keine Treffer",
@@ -188,6 +192,12 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./bayesian_logistic_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Bayesian Logistic Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Literatur</span></a>
   </div>
@@ -203,6 +213,8 @@ window.Quarto = {
    
   <ul>
   <li><a href="#vergleich-von-normal-und-poisson-verteilung" id="toc-vergleich-von-normal-und-poisson-verteilung" class="nav-link active" data-scroll-target="#vergleich-von-normal-und-poisson-verteilung"><span class="header-section-number">5.1</span> Vergleich von Normal und Poisson Verteilung</a></li>
+  <li><a href="#woe-1-liegestützen" id="toc-woe-1-liegestützen" class="nav-link" data-scroll-target="#woe-1-liegestützen"><span class="header-section-number">5.2</span> WOE 1: Liegestützen</a></li>
+  <li><a href="#das-modell" id="toc-das-modell" class="nav-link" data-scroll-target="#das-modell"><span class="header-section-number">5.3</span> Das Modell</a></li>
   </ul>
 </nav>
     </div>
@@ -549,6 +561,71 @@ f(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{1}{2} \left(\frac{x-\mu}{\sigma}\r
 </div>
 </div>
 </div>
+</section>
+<section id="woe-1-liegestützen" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="woe-1-liegestützen"><span class="header-section-number">5.2</span> WOE 1: Liegestützen</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggdist)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>data_lieg <span class="ot">&lt;-</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">Alter_n =</span> <span class="fu">round</span>(<span class="fu">runif</span>(N, <span class="dv">5</span>, <span class="dv">18</span>), <span class="dv">0</span>),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">Alter =</span> <span class="fu">as.factor</span>(Alter_n),</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">lieg_male =</span> <span class="fu">rpois</span>(N, Alter_n <span class="sc">+</span> <span class="dv">3</span>) <span class="sc">+</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>),<span class="dv">1</span>)<span class="sc">*</span><span class="fu">rpois</span>(N, <span class="dv">3</span>),</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">lieg_female =</span> lieg_male <span class="sc">+</span><span class="fu">sample</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>),<span class="dv">1</span>)<span class="sc">*</span><span class="fu">rpois</span>(N, <span class="dv">3</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(lieg_male <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> lieg_female <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(lieg_male, lieg_female),</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"Geschlecht"</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"Liegestutzen"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Geschlecht =</span> <span class="fu">ifelse</span>(Geschlecht <span class="sc">==</span> <span class="st">"lieg_male"</span>,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"male"</span>, <span class="st">"female"</span>))</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Liegestützen <iconify-icon inline="" icon="fa6-solid:database" aria-label="Icon database from fa6-solid Iconify.design set." title="Icon database from fa6-solid Iconify.design set."></iconify-icon>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Dieses entlang der MoMo-Studie generierte Datenset enthält die Anzahl der Liegestützen, die von 5-18-jährigen Kindern in einem bestimmten Intervall gelistet werden. Die Daten enthalten die folgenden Variablen:</p>
+<ul>
+<li>Alter_n_: Alter der Kinder <code>numric</code></li>
+<li>Alter: Alter der Kinder <code>factor</code></li>
+<li>Geschlecht: Geschlecht der Kinder</li>
+<li>Liegestützen: Anzahl der Liegestützen, die von den Kindern gemacht wurden</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="bayesian_poisson_regression_files/figure-html/unnamed-chunk-8-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="bayesian_poisson_regression_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="bayesian_poisson_regression_files/figure-html/unnamed-chunk-8-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="bayesian_poisson_regression_files/figure-html/unnamed-chunk-8-2.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="das-modell" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="das-modell"><span class="header-section-number">5.3</span> Das Modell</h2>
+<p><span class="math display">\[
+Liegestuetzen_i \sim \operatorname{Poisson}(\lambda_i)
+\]</span> <span class="math display">\[
+\operatorname{log}\left(\lambda_i\right) = b_0 + b_1 \cdot Geschlecht_i + \dots       
+\]</span></p>
 
 
 </section>
@@ -992,12 +1069,37 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link" aria-label="Literatur">
-        <span class="nav-page-text">Literatur</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./bayesian_logistic_regression.html" class="pagination-link" aria-label="Bayesian Logistic Regression">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Bayesian Logistic Regression</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","selector":".lightbox","loop":false,"openEffect":"zoom","descPosition":"bottom"});
+window.onload = () => {
+  lightboxQuarto.on('slide_before_load', (data) => {
+    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+    const href = trigger.getAttribute('href');
+    if (href !== null) {
+      const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+      if (imgEl !== null) {
+        const srcAttr = imgEl.getAttribute("src");
+        if (srcAttr && srcAttr.startsWith("data:")) {
+          slideConfig.href = srcAttr;
+        }
+      }
+    } 
+  });
+
+  lightboxQuarto.on('slide_after_load', (data) => {
+    const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+    if (window.Quarto?.typesetMath) {
+      window.Quarto.typesetMath(slideNode);
+    }
+  });
+
+};
+          </script>
 
 
 
