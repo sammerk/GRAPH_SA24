@@ -309,7 +309,8 @@ BF=\frac{P\left(D \mid H_1\right)}{P\left(D\mid H_2\right)}
 \]</span> Wobei <span class="math inline">\(D\)</span> für »Data« steht und <span class="math inline">\(H_1\)</span> und <span class="math inline">\(H_2\)</span> für Modell 1 und Modell 2 stehen - oftmals wird stattdessen auch Hypothese 1 <span class="math inline">\(H_1\)</span> und Hypothese 2 <span class="math inline">\(H_2\)</span> geschrieben, was dasselbe meint.<br>
 Dass der BF relative Evidenz quantifiziert, wird bereits aus der Definition klar, verbreitete Fehlverständnisse <span class="citation" data-cites="tendeiro2024">(<a href="references.html#ref-tendeiro2024" role="doc-biblioref">Tendeiro, Kiers, Hoekstra, Wong, &amp; Morey, 2024</a>)</span> werden hoffentlich eingedämmt, wenn man sich klar macht, dass aus dieser Definition mithilfe des Bayes Theorem folgt</p>
 <p><span class="math display">\[
-BF=\frac{P\left(D \mid H_1\right)}{P\left(D\mid H_2\right)}\overset{\text{Bayes Theorem}}{=}\frac{\frac{P\left(D \mid H_1\right) \cdot P(D)}{P\left(H_1\right)}}{\frac{P\left(D \mid H_2\right) \cdot P(D)}{P\left(H_2\right)}}\overset{\text{Kürze } P(D)}{=}\frac{P\left(H_1 \mid D\right) \cdot P\left(H_2\right)}{P\left(H_2 \mid D\right) \cdot P\left(H_1\right)} = \frac{P\left(H_1 \mid D\right)}{P\left(H_2 \mid D\right)} \cdot \frac{P\left(H_2\right)}{P\left(H_1\right)}
+BF=\frac{P\left(D \mid H_1\right)}{P\left(D\mid H_2\right)}\overset{\text{Bayes Theorem}}{=}\frac{\frac{P\left(H_1 \mid D\right) \cdot P(D)}{P\left(H_1\right)}}{\frac{P\left(H_2 \mid D\right) \cdot P(D)}{P\left(H_2\right)}}\overset{\text{Kürze } P(D)}{=}
+\]</span> <span class="math display">\[= \frac{P\left(H_1 \mid D\right) \cdot P\left(H_2\right)}{P\left(H_2 \mid D\right) \cdot P\left(H_1\right)} = \frac{P\left(H_1 \mid D\right)}{P\left(H_2 \mid D\right)} \cdot \frac{P\left(H_2\right)}{P\left(H_1\right)}
 \]</span></p>
 <p>Stellt man nun die Gleichung um erhält man:</p>
 <p><span class="math display">\[
@@ -392,7 +393,7 @@ ui &lt;- page_fluid(
                step = .1
            ),
            sliderInput(
-               "theta2", "Hypothese 2: Anteil Pro G8",
+               "theta2", "Hypothese 2: Anteil Pro G9",
                min = 0,
                max = 1,
                value = .6,
@@ -1252,7 +1253,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","openEffect":"zoom","loop":false,"selector":".lightbox"});
+<script>var lightboxQuarto = GLightbox({"loop":false,"selector":".lightbox","closeEffect":"zoom","openEffect":"zoom","descPosition":"bottom"});
 window.onload = () => {
   lightboxQuarto.on('slide_before_load', (data) => {
     const { slideIndex, slideNode, slideConfig, player, trigger } = data;

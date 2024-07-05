@@ -240,10 +240,21 @@ mod3 <- glm(Liegestutzen ~ Geschlecht,
 ```
 
 
-## Das Modell
+## Beispielmodell
 $$
 Liegestuetzen_i \sim \operatorname{Poisson}(\lambda_i)
 $$
 $$
-\operatorname{log}\left(\lambda_i\right) = b_0 + b_1 \cdot Geschlecht_i + \dots       
+\operatorname{log}\left(\lambda_i\right) = b_0 + b_1 \cdot I^{GeschlechtMale}_i       
+$$
+$$
+\lambda_i = e^{b_0 + b_1 \cdot I^{GeschlechtMale}_i}
+$$
+
+Also:
+$$
+\begin{aligned}
+\text{Modell für männliche Kinder: } \lambda_i &= e^{b_0} \\
+\text{Modell für weibliche Kinder: } \lambda_i &= e^{b_0 + b_1} = e^{b_0} \cdot e^{b_1}
+\end{aligned}
 $$

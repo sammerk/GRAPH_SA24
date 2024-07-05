@@ -214,7 +214,7 @@ window.Quarto = {
   <ul>
   <li><a href="#vergleich-von-normal-und-poisson-verteilung" id="toc-vergleich-von-normal-und-poisson-verteilung" class="nav-link active" data-scroll-target="#vergleich-von-normal-und-poisson-verteilung"><span class="header-section-number">5.1</span> Vergleich von Normal und Poisson Verteilung</a></li>
   <li><a href="#woe-1-liegestützen" id="toc-woe-1-liegestützen" class="nav-link" data-scroll-target="#woe-1-liegestützen"><span class="header-section-number">5.2</span> WOE 1: Liegestützen</a></li>
-  <li><a href="#das-modell" id="toc-das-modell" class="nav-link" data-scroll-target="#das-modell"><span class="header-section-number">5.3</span> Das Modell</a></li>
+  <li><a href="#beispielmodell" id="toc-beispielmodell" class="nav-link" data-scroll-target="#beispielmodell"><span class="header-section-number">5.3</span> Beispielmodell</a></li>
   </ul>
 </nav>
     </div>
@@ -619,12 +619,20 @@ Liegestützen <iconify-icon inline="" icon="fa6-solid:database" aria-label="Icon
 </div>
 </div>
 </section>
-<section id="das-modell" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="das-modell"><span class="header-section-number">5.3</span> Das Modell</h2>
+<section id="beispielmodell" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="beispielmodell"><span class="header-section-number">5.3</span> Beispielmodell</h2>
 <p><span class="math display">\[
 Liegestuetzen_i \sim \operatorname{Poisson}(\lambda_i)
 \]</span> <span class="math display">\[
-\operatorname{log}\left(\lambda_i\right) = b_0 + b_1 \cdot Geschlecht_i + \dots       
+\operatorname{log}\left(\lambda_i\right) = b_0 + b_1 \cdot I^{GeschlechtMale}_i       
+\]</span> <span class="math display">\[
+\lambda_i = e^{b_0 + b_1 \cdot I^{GeschlechtMale}_i}
+\]</span></p>
+<p>Also: <span class="math display">\[
+\begin{aligned}
+\text{Modell für männliche Kinder: } \lambda_i &amp;= e^{b_0} \\
+\text{Modell für weibliche Kinder: } \lambda_i &amp;= e^{b_0 + b_1} = e^{b_0} \cdot e^{b_1}
+\end{aligned}
 \]</span></p>
 
 
@@ -1075,7 +1083,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","selector":".lightbox","loop":false,"openEffect":"zoom","descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","selector":".lightbox","loop":false,"openEffect":"zoom"});
 window.onload = () => {
   lightboxQuarto.on('slide_before_load', (data) => {
     const { slideIndex, slideNode, slideConfig, player, trigger } = data;

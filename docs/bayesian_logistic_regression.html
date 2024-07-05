@@ -280,9 +280,9 @@ Admisson_i \sim \operatorname{Bernoulli}(\theta_i)
 <p><span class="math display">\[
 \begin{aligned}
 \operatorname{logit}(\theta_i) &amp;= b_0 + b_1 \cdot GRE_i + b_2 \cdot GPA_i \\
-\operatorname{log}\left( \frac{\theta_i}{1-\theta_i} \right) &amp;= b_0 + b_1 \cdot GRE_i + b_2 \cdot GPA_i
+\theta_i &amp;= \operatorname{logit}^{-1}\left(b_0 + b_1 \cdot GRE_i + b_2 \cdot GPA_i\right) \\
 \end{aligned}
-\]</span></p>
+\]</span> Wobei in R <span class="math inline">\(\operatorname{logit}()\)</span> <code>logit()</code> und $^{-1}() = $ <code>plogis()</code>.</p>
 
 
 </section>

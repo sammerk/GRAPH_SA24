@@ -235,7 +235,7 @@ Variables:
 ```{r}
 #| message: false
 data_college_success <- 
-  read_csv("https://bit.ly/merk-data-college-success")
+  read_csv("https://raw.githubusercontent.com/jasp-stats/jasp-data-library/main/College%20Success/College%20Success.csv")
 ```
 
 ### Ein erstes Modell mit `{brms}`

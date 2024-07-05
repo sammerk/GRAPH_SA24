@@ -30,8 +30,8 @@ $$
 $$
 \begin{aligned}
 \operatorname{logit}(\theta_i) &= b_0 + b_1 \cdot GRE_i + b_2 \cdot GPA_i \\
-\operatorname{log}\left( \frac{\theta_i}{1-\theta_i} \right) &= b_0 + b_1 \cdot GRE_i + b_2 \cdot GPA_i
+\theta_i &= \operatorname{logit}^{-1}\left(b_0 + b_1 \cdot GRE_i + b_2 \cdot GPA_i\right) \\
 \end{aligned}
 $$
-
+Wobei in R $\operatorname{logit}()$ `logit()` und  $\operatorname{logit}^{-1}() = $ `plogis()`. 
 

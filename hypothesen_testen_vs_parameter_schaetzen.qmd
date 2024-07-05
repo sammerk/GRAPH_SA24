@@ -54,7 +54,9 @@ Wobei $D$ für »Data« steht und $H_1$ und $H_2$ für Modell 1 und Modell 2 ste
 Dass der BF relative Evidenz quantifiziert, wird bereits aus der Definition klar, verbreitete Fehlverständnisse [@tendeiro2024] werden hoffentlich eingedämmt, wenn man sich klar macht, dass aus dieser Definition mithilfe des Bayes Theorem folgt
 
 $$
-BF=\frac{P\left(D \mid H_1\right)}{P\left(D\mid H_2\right)}\overset{\text{Bayes Theorem}}{=}\frac{\frac{P\left(D \mid H_1\right) \cdot P(D)}{P\left(H_1\right)}}{\frac{P\left(D \mid H_2\right) \cdot P(D)}{P\left(H_2\right)}}\overset{\text{Kürze } P(D)}{=}\frac{P\left(H_1 \mid D\right) \cdot P\left(H_2\right)}{P\left(H_2 \mid D\right) \cdot P\left(H_1\right)} = \frac{P\left(H_1 \mid D\right)}{P\left(H_2 \mid D\right)} \cdot \frac{P\left(H_2\right)}{P\left(H_1\right)}
+BF=\frac{P\left(D \mid H_1\right)}{P\left(D\mid H_2\right)}\overset{\text{Bayes Theorem}}{=}\frac{\frac{P\left(H_1 \mid D\right) \cdot P(D)}{P\left(H_1\right)}}{\frac{P\left(H_2 \mid D\right) \cdot P(D)}{P\left(H_2\right)}}\overset{\text{Kürze } P(D)}{=} 
+$$
+$$= \frac{P\left(H_1 \mid D\right) \cdot P\left(H_2\right)}{P\left(H_2 \mid D\right) \cdot P\left(H_1\right)} = \frac{P\left(H_1 \mid D\right)}{P\left(H_2 \mid D\right)} \cdot \frac{P\left(H_2\right)}{P\left(H_1\right)}
 $$
 
 Stellt man nun die Gleichung um erhält man:
@@ -138,7 +140,7 @@ ui <- page_fluid(
                step = .1
            ),
            sliderInput(
-               "theta2", "Hypothese 2: Anteil Pro G8",
+               "theta2", "Hypothese 2: Anteil Pro G9",
                min = 0,
                max = 1,
                value = .6,
