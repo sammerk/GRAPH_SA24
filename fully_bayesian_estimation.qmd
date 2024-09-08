@@ -101,7 +101,7 @@ ui <- page_fluid(
              value = 8,
              step = 1
            )
-         ))), 
+         ), full_screen = T)), 
   card(card_header("Posterior", class = "bg-dark"),
        card_body(plotOutput("plot")))
 )
